@@ -1,9 +1,15 @@
 #include <stdio.h>;
 
-int main() {
+/* comentario 
+de 
+varias 
+lineas
+*/
+
+int main() {  //Funcnion principal del programa
  
     printf("Hello, World!\n");
  
-    
+
     return 0;
 }
