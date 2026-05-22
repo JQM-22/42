@@ -20,7 +20,7 @@ int main (void) {
     total_pagar = total_compra - descuento;
 
     //salida de datos
-    printf (" Total a pagar con descuento aplicado: %.2f\n" , total_pagar );
+    printf (" Total a pagar con descuento aplicado: %.2f € \n" , total_pagar );
 
 
 
