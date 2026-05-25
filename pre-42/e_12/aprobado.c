@@ -19,6 +19,10 @@ int main(void) {
         printf (" El alumno esta aprobado \n");
     }
 
+    if (nota < 5) {
+        printf (" El alumno esta suspenso \n");
+    }
+
 
 
     return 0;
