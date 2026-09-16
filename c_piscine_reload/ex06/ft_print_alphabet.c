@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_iterative_factorial.c                           :+:      :+:    :+:   */
+/*   ft_print_alphabet.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/10 17:44:35 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/16 11:04:39 by joquinta         ###   ########.fr       */
+/*   Created: 2026/09/09 17:40:25 by joquinta          #+#    #+#             */
+/*   Updated: 2026/09/16 13:04:30 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_iterative_factorial(int nb)
-{
-	int	i;
-	int	result;
+void	ft_putchar(char c);
 
-	i = nb;
-	if (nb < 0 || nb > 12)
-		return (0);
-	if (nb == 1 || nb == 0)
-		return (1);
-	result = 1;
-	while (i > 1)
+void	ft_print_alphabet(void)
+{
+	char	abc;
+
+	abc = 'a';
+	while (abc <= 'z')
 	{
-		(result = result * i);
-		i--;
+		ft_putchar (abc);
+		abc++;
 	}
-	return (result);
 }
-/*
-#include <stdio.h>
-
-int	main(void)
+/*int	main(void)
 {
-	printf ("%d\n", ft_iterative_factorial(0));
-	return (0);
+	ft_print_alphabet();
+	return(0);
 }*/

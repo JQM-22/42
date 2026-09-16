@@ -6,16 +6,18 @@
 /*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 16:18:38 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/15 18:03:07 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/09/16 13:19:12 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+//#include <unistd.h>
 
-void	ft_putchar(char c)
+void	ft_putchar(char c);
+
+/*void	ft_putchar(char c)
 {
 	write (1, &c, 1);
-}
+}*/
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -59,7 +61,7 @@ int	main(int argc, char **argv)
 			temp = argv[i];
 			argv[i] = argv[i + 1];
 			argv[i + 1] = temp;
-			i = 1;
+			i = 0;
 		}
 		else
 			i++;
