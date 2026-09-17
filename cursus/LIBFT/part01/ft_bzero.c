@@ -1,4 +1,6 @@
-void	*ft_memset(void *s, int c, size_t len)
+#include <strings.h>
+
+void	ft_bzero(void *s, size_t len)
 {
 	unsigned char	*str;
 	size_t			i;
@@ -7,8 +9,7 @@ void	*ft_memset(void *s, int c, size_t len)
 	i = 0;
 	while (i < len)
 	{
-		str[i] = (unsigned char)c;
+		str[i] = 0;
 		i++;
 	}
-	return (s);
 }
