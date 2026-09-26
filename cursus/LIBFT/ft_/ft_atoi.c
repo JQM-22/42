@@ -6,7 +6,7 @@
 /*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 19:45:15 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/22 18:06:31 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/09/25 19:21:09 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,3 +35,20 @@ int	ft_atoi(const char *str)
 	}
 	return (result * sign);
 }
+/*
+DESCRIPTION: Converts the initial portion of the string pointed to by 'str'
+             to an integer representation.
+PARAM: 'str' -> String to convert.
+RETURN: The converted integer value * sign.
+
+#include <stdio.h>
+
+int	main(void)
+{
+	printf ("---testing ft_atoi---\n");
+	printf("Result of: '   -42a' -> %d\n", ft_atoi(" - - 42a"));
+	printf("Result of: '--42a' -> %d\n", ft_atoi(" -+42a"));
+	printf("Result of: '++42a' -> %d\n", ft_atoi(" 42a"));
+	printf("Result of: '++42a' -> %d\n", ft_atoi(" --42a"));
+	return (0);
+}*/
