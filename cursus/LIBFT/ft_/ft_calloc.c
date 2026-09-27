@@ -9,30 +9,45 @@
 /*   Updated: 2026/09/25 19:44:09 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
-void	ft_bzero(void *s, size_t len);
+#include "libft.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	size_t	i;
 	void	*total_bytes;
 
-	if (count != 0 && size > SIZE_MAX / count) //protection
+	if (count != 0 && size > SIZE_MAX / count)
 		return (NULL);
-	total_bytes = malloc(count * size); //reserve memory
-	if (malloc == NULL)
+	total_bytes = malloc(count * size);
+	if (total_bytes == NUL)
 		return (NULL);
-	ft_bzero(total_bytes, count * size);  //clean memory
+	ft_bzero(total_bytes, count * size);
 	return (total_bytes);
 }
 /*
 DESCRIPTION: Allocates memory for an array of 'count' elements of 'size'
-             bytes each and initializes all bytes in the allocated memory to zero.
+             bytes each and initializes all bytes
+	     in the allocated memory to zero.
 PARAM: 'count' -> Number of elements, 'size' -> Size of each element.
 RETURN: Pointer to allocated memory, or NULL if allocation fails.
-*/
 
 int	main(void)
 {
-	int	*
-}
+	int		*arr;
+	size_t	i;
+
+	arr = (int *)ft_calloc(5, sizeof(int));
+	if (!arr)
+	{
+		printf("Error en ft_calloc\n");
+		return (1);
+	}
+	printf("---testing ft_calloc---\n");
+	i = 0;
+	while (i < 5)
+	{
+		printf("arr[%zu] = %d\n", i, arr[i]);
+		i++;
+	}
+	free(arr);
+	return (0);	
+}*/

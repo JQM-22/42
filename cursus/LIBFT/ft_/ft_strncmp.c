@@ -45,7 +45,8 @@ int	main(void)
 	// Primeros 4 caracteres ("Hola" vs "Hola") -> Debe dar 0
 	printf("Compare 4 chars : %d\n", ft_strncmp(s1, s2, 4));
 
-	// Primeros 6 caracteres ("Hola 4" vs "Hola W") -> Resultado negativo ('4' < 'W')
+	// Primeros 6 caracteres ("Hola 4" vs "Hola W") 
+	// -> Resultado negativo ('4' < 'W')
 	printf("Compare 6 chars : %d\n", ft_strncmp(s1, s2, 6));
 
 	// Caso límite n = 0 -> Debe dar 0

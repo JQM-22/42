@@ -29,7 +29,9 @@ void	*ft_memchr(const void *s, int c, size_t n)
 /*
 DESCRIPTION: Scans the first 'n' bytes of the memory area pointed to by 's'
              for the first instance of 'c' (converted to an unsigned char).
-PARAM: 's' -> Pointer to memory area, 'c' -> Byte to locate (as int), 'n' -> Max byte count.
+PARAM: 's' -> Pointer to memory area, 
+	'c' -> Byte to locate (as int), 
+	'n' -> Max byte count.
 RETURN: Pointer to the matching byte, or NULL if the byte does not occur.
 
 #include <stdio.h>

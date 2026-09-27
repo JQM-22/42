@@ -28,6 +28,7 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	}
 	return (0);
 }
+
 /*
 DESCRIPTION: Compares the first 'n' bytes of memory areas 's1' and 's2'.
 PARAM: 's1' -> First memory area, 's2' -> Second memory area, 'n' -> Byte count.
@@ -54,4 +55,5 @@ int	main(void)
 	printf("Compare 6 bytes : %d\n", ft_memcmp(s1, s2, 6));
 
 	return (0);
-}*\
+}
+*/

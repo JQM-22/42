@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
+
 size_t	ft_strlen(const char *str)
 {
 	size_t	i;
@@ -33,4 +34,4 @@ int	main(void)
 	printf ("--testing ft_strlen--\n");
 	printf ("test: %zu\n", ft_strlen("testing ft_strlen"));
 	return (0);
-}
+}*/

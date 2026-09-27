@@ -17,8 +17,10 @@ int	ft_isalnum(int c)
 		return (1);
 	return (0);
 }
+
 /*
-DESCRIPTION: Checks if 'c' is alphanumeric (letter 'a'-'z', 'A'-'Z' or digit '0'-'9').
+DESCRIPTION: Checks if 'c' is alphanumeric 
+	     (letter 'a'-'z', 'A'-'Z' or digit '0'-'9').
 PARAM: 'c' -> Character to check (as int).
 RETURN: Non-zero if alphanumeric, 0 if not.
 

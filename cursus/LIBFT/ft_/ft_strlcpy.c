@@ -33,7 +33,9 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dst_len)
 /*
 DESCRIPTION: Copies up to 'dst_len - 1' chars from 'src' to 'dst',
              NUL-terminating the result if 'dstsize' is not 0.
-PARAM: 'dst' -> Destination buffer, 'src' -> Source string, 'dst_len' -> Buffer size.
+PARAM: 'dst' -> Destination buffer,
+	'src' -> Source string,
+	'dst_len' -> Buffer size.
 RETURN: Total length of the string 'src' it tried to create.
 
 #include <stdio.h>

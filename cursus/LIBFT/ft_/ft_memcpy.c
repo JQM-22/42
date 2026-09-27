@@ -31,7 +31,9 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 }
 /*
 DESCRIPTION: Copies 'n' bytes from memory area 'src' to memory area 'dst'.
-PARAM: 'dst' -> Pointer to destination, 'src' -> Pointer to source, 'n' -> Byte count.
+PARAM: 'dst' -> Pointer to destination, 
+	'src' -> Pointer to source, 
+	'n' -> Byte count.
 RETURN: Pointer to 'dst'.
 
 #include <stdio.h>

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
+
 size_t	ft_strlcat(char *dst, const char *src, size_t dst_size)
 {
 	size_t	i;
@@ -39,8 +40,11 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dst_size)
 /*
 DESCRIPTION: Adds 'src' to 'dst' (taking size 'dst_size'),
              NUL-terminating the result if space permits.
-PARAM: 'dst' -> Destination buffer, 'src' -> Source string, 'dst_size' -> Buffer size.
-RETURN: Total length of the string it tried to create (initial 'dst' length + 'src' length).
+PARAM: 'dst' -> Destination buffer,
+	'src' -> Source string,
+	'dst_size' -> Buffer size.
+RETURN: Total length of the string it tried to create 
+	(initial 'dst' length + 'src' length).
 
 #include <stdio.h>
 #include <stddef.h>

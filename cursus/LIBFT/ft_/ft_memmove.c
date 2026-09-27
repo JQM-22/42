@@ -41,7 +41,9 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 /*
 ** DESCRIPTION: Copies 'len' bytes from 'src' to 'dst', handling overlapping
 **              memory safety by copying backwards if 'dst' is after 'src'.
-** PARAM: 'dst' -> Pointer to destination, 'src' -> Pointer to source, 'len' -> Byte count.
+** PARAM: 'dst' -> Pointer to destination,
+	  'src' -> Pointer to source, 
+	  'len' -> Byte count.
 ** RETURN: Pointer to 'dst'.
 
 #include <stdio.h>
