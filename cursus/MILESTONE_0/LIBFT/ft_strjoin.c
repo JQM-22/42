@@ -6,7 +6,7 @@
 /*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/29 16:34:09 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/29 17:38:26 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/09/30 19:11:07 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -21,7 +21,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (s_res == NULL)
 		return (NULL);
 	i = 0;
-	while (s1[i]);
+	while (s1[i])
 	{
 		s_res[i] = s1[i];
 		i++;
@@ -34,5 +34,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	}
 	s_res[i] = '\0';
-	return (s_res); 
+	return (s_res);
 }
