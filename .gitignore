@@ -1,3 +1,9 @@
-a.out
-*.o
+# Testers
+libft_tester/
+libfttester/
+libftTester/
+*tester*/
 
+# Archivos de compilación y librería
+*.o
+*.a
