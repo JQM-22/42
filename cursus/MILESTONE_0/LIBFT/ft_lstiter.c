@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_lstiter.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/02 17:47:29 by username          #+#    #+#             */
-/*   Updated: 2026/10/02 19:09:31 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/02 19:42:22 by username          #+#    #+#             */
+/*   Updated: 2026/10/02 19:47:58 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstlast(t_list *lst)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	if (!lst)
-		return (NULL);
-	while (lst->next != NULL)
+	if (!lst || !f)
+		return ;
+	while (lst != NULL)
 	{
+		f(lst->content);
 		lst = lst->next;
 	}
-	return (lst);
 }
