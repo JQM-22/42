@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/01 20:15:39 by username          #+#    #+#             */
-/*   Updated: 2026/10/02 15:56:41 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/02 17:15:01 by username          #+#    #+#             */
+/*   Updated: 2026/10/02 18:48:55 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <unistd.h>
 
-void	ft_putnbr_fd(int n, int fd)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	char	*str;
-
-	str = ft_itoa(n);
-	if (!str)
+	if (!new || !lst)
 		return ;
-	ft_putstr_fd(str, fd);
-	free(str);
+	new->next = *lst;
+	*lst = new;
 }
