@@ -59,7 +59,6 @@ La librería consta de las siguientes funciones organizadas por categorías:
 
 Para compilar la librería completa, ejecuta el comando `make` en la raíz del repositorio:
 
-```bash
 make
 Esto generará el archivo de la librería estática llamada libft.a.
 
