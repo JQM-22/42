@@ -56,8 +56,6 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 }
 ```
 
-> Nota sobre tu implementación: En el código original que proporcionaste, la línea `i++;` está fuera del bucle `while`, lo que provocaría un bucle infinito al no actualizarse `i` durante las iteraciones. Se debe incluir `i++;` dentro del bloque de ejecución del `while`.
-
 #### Ejemplo de uso (main)
 
 C

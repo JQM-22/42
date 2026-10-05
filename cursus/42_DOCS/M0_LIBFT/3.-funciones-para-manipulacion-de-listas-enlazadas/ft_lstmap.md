@@ -70,12 +70,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 }
 ```
 
-> Notas de corrección sobre tu implementación:
->
-> 1. Inicialización: No habías inicializado `new_lst = NULL;`. Pasar un puntero basura no inicializado a `ft_lstclear(&new_lst, del)` produce un fallo de segmentación si la primera o segunda asignación falla.
-> 2. Fuga de memoria (_Memory Leak_) en fallo: Si `new_node` devuelve `NULL`, el contenido que ya había generado la función `f` (`new_content`) quedaría flotando en memoria si no lo liberas explícitamente con `del(new_content);` antes de llamar a `ft_lstclear`.
-> 3. Orden de avance: Es más intuitivo avanzar el puntero `lst = lst->next;` al final del bucle una vez procesado el nodo actual.
-
 #### Ejemplo de uso (main)
 
 C

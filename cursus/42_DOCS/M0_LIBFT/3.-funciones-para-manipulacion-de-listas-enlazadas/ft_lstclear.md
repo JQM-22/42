@@ -60,8 +60,6 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 }
 ```
 
-> Nota sobre tu implementación: Se recomienda añadir la comprobación `if (!lst || !*lst || !del) return ;` al principio para evitar desreferenciar punteros nulos en caso de llamadas con argumentos no válidos.
-
 #### Ejemplo de uso (main)
 
 C

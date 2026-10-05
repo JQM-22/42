@@ -57,8 +57,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 }
 ```
 
-> Nota sobre tu implementación: Se sugiere añadir la comprobación `if (!lst || !new) return ;` al inicio de la función para evitar que el programa falle si se le pasa un puntero `lst` o `new` nulo.
-
 #### Ejemplo de uso (main)
 
 C
