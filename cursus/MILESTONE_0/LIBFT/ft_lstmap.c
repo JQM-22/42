@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/02 19:49:45 by username          #+#    #+#             */
-/*   Updated: 2026/10/05 18:20:15 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/02 19:49:45 by joquinta          #+#    #+#             */
+/*   Updated: 2026/10/05 19:55:31 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,12 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*new_node;
 	t_list	*new_lst;
 
-	if (!lst || !f || !del)
+	if (!lst || !f)
 		return (NULL);
 	new_lst = NULL;
 	while (lst != NULL)
 	{
 		new_content = f(lst->content);
-		lst = lst->next;
 		new_node = ft_lstnew(new_content);
 		if (!new_node)
 		{

@@ -5,10 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/01 18:26:16 by username          #+#    #+#             */
-/*   Updated: 2026/10/01 19:23:04 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/01 18:26:16 by joquinta          #+#    #+#             */
+/*   Updated: 2026/10/05 19:36:27 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
+#include <stddef.h>
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {

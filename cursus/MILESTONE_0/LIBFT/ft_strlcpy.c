@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:29:59 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/23 18:51:11 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:36:07 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 #include <stddef.h>
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dst_len)
@@ -32,10 +34,10 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dst_len)
 }
 /*
 DESCRIPTION: Copies up to 'dst_len - 1' chars from 'src' to 'dst',
-             NUL-terminating the result if 'dstsize' is not 0.
+NUL-terminating the result if 'dstsize' is not 0.
 PARAM: 'dst' -> Destination buffer,
-	'src' -> Source string,
-	'dst_len' -> Buffer size.
+'src' -> Source string,
+'dst_len' -> Buffer size.
 RETURN: Total length of the string 'src' it tried to create.
 
 #include <stdio.h>
@@ -45,13 +47,13 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dst_len);
 
 int	main(void)
 {
-	char	src[] = "Hola 42!";
-	char	dst[10];
-	size_t	ret;
+char	src[] = "Hola 42!";
+char	dst[10];
+size_t	ret;
 
-	printf("--testing ft_strlcpy--\n");
-	ret = ft_strlcpy(dst, src, sizeof(dst));
-	printf("Copied string : %s\n", dst);
-	printf("Return value  : %zu (src length)\n", ret);
-	return (0);
+printf("--testing ft_strlcpy--\n");
+ret = ft_strlcpy(dst, src, sizeof(dst));
+printf("Copied string : %s\n", dst);
+printf("Return value  : %zu (src length)\n", ret);
+return (0);
 }*/

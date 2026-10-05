@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/29 17:40:30 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/30 19:12:01 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:28:55 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

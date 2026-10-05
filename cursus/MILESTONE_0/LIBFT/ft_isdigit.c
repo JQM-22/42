@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:25:17 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/22 19:23:17 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:33:13 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isdigit(int c)
 {
@@ -25,7 +27,7 @@ RETURN: Non-zero if digit, 0 if not.
 
 int	main(void)
 {
-	printf("--testing ft_isdigit--\n");
-	printf("test: '5': %d\n",  ft_isdigit('5'));
-	return(0);
+printf("--testing ft_isdigit--\n");
+printf("test: '5': %d\n",  ft_isdigit('5'));
+return(0);
 }*/

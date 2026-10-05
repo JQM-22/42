@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/01 19:45:25 by username          #+#    #+#             */
-/*   Updated: 2026/10/01 19:53:22 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/01 19:45:25 by joquinta          #+#    #+#             */
+/*   Updated: 2026/10/05 19:34:40 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 void	ft_putchar_fd(char c, int fd)
 {

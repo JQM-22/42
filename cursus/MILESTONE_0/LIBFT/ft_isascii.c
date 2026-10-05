@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:24:57 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/22 19:37:48 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:32:57 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isascii(int c)
 {
@@ -25,7 +27,7 @@ RETURN: Non-zero if ASCII character, 0 if not.
 
 int	main(void)
 {
-	printf ("--testing ft_isascii--\n");
-	printf ("test 'a': %d\n", ft_isascii('a'));
-	return (0);
+printf ("--testing ft_isascii--\n");
+printf ("test 'a': %d\n", ft_isascii('a'));
+return (0);
 }*/

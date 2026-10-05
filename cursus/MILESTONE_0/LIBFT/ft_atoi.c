@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 19:45:15 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/25 19:21:09 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:32:00 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_atoi(const char *str)
 {
@@ -37,7 +39,7 @@ int	ft_atoi(const char *str)
 }
 /*
 DESCRIPTION: Converts the initial portion of the string pointed to by 'str'
-             to an integer representation.
+to an integer representation.
 PARAM: 'str' -> String to convert.
 RETURN: The converted integer value * sign.
 
@@ -45,10 +47,10 @@ RETURN: The converted integer value * sign.
 
 int	main(void)
 {
-	printf ("---testing ft_atoi---\n");
-	printf("Result of: '   -42a' -> %d\n", ft_atoi(" - - 42a"));
-	printf("Result of: '--42a' -> %d\n", ft_atoi(" -+42a"));
-	printf("Result of: '++42a' -> %d\n", ft_atoi(" 42a"));
-	printf("Result of: '++42a' -> %d\n", ft_atoi(" --42a"));
-	return (0);
+printf ("---testing ft_atoi---\n");
+printf("Result of: '   -42a' -> %d\n", ft_atoi(" - - 42a"));
+printf("Result of: '--42a' -> %d\n", ft_atoi(" -+42a"));
+printf("Result of: '++42a' -> %d\n", ft_atoi(" 42a"));
+printf("Result of: '++42a' -> %d\n", ft_atoi(" --42a"));
+return (0);
 }*/

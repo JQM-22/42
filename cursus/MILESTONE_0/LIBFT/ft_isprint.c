@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:25:35 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/22 19:41:30 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:33:21 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isprint(int c)
 {
@@ -25,7 +27,7 @@ RETURN: Non-zero if printable, 0 if not.
 
 int	main(void)
 {
-	printf ("--testing ft_isprint--\n");
-	printf ("test 'a': %d\n", ft_isprint('a'));
-	return (0);
+printf ("--testing ft_isprint--\n");
+printf ("test 'a': %d\n", ft_isprint('a'));
+return (0);
 }*/

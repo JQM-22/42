@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:30:15 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/22 20:12:53 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:36:17 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 #include <stddef.h>
 
 size_t	ft_strlen(const char *str)
@@ -31,7 +33,7 @@ RETURN: Number of characters in 'str'.
 
 int	main(void)
 {
-	printf ("--testing ft_strlen--\n");
-	printf ("test: %zu\n", ft_strlen("testing ft_strlen"));
-	return (0);
+printf ("--testing ft_strlen--\n");
+printf ("test: %zu\n", ft_strlen("testing ft_strlen"));
+return (0);
 }*/

@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:24:01 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/22 19:15:05 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:32:39 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isalpha(int c)
 {
@@ -24,7 +26,7 @@ RETURN: Non-zero if alphabetic, 0 if not.
 #include <stdio.h>
 int	main(void)
 {
-	printf("--testing ft_isalpha()--\n");
-	printf("test 'a': %d\n", ft_isalpha('a'));
-	return(0);
+printf("--testing ft_isalpha()--\n");
+printf("test 'a': %d\n", ft_isalpha('a'));
+return(0);
 }*/

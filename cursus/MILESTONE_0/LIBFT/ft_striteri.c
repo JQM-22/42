@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/01 19:23:10 by username          #+#    #+#             */
-/*   Updated: 2026/10/05 18:06:53 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/01 19:23:10 by joquinta          #+#    #+#             */
+/*   Updated: 2026/10/05 19:35:49 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {

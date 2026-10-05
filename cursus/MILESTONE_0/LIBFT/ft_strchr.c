@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:28:34 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/23 19:24:22 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:35:40 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -17,12 +19,12 @@ char	*ft_strchr(const char *s, int c)
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
+		if (s[i] == (char) c)
+			return ((char *) & s[i]);
 		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
+	if (s[i] == (char) c)
+		return ((char *) & s[i]);
 	return (0);
 }
 /*
@@ -34,18 +36,18 @@ RETURN: Pointer to first occurrence of 'c', or NULL if not found.
 
 int	main(void)
 {
-	char	str[] = "Hola 42!";
-	char	*ptr;
+char	str[] = "Hola 42!";
+char	*ptr;
 
-	printf("--testing ft_strchr--\n");
+printf("--testing ft_strchr--\n");
 
-	ptr = ft_strchr(str, '4');
-	printf("Search '4'  : %s\n", ptr ? ptr : "NULL");
+ptr = ft_strchr(str, '4');
+printf("Search '4'  : %s\n", ptr ? ptr : "NULL");
 
-	ptr = ft_strchr(str, 'x');
-	printf("Search 'x'  : %s\n", ptr ? ptr : "NULL");
+ptr = ft_strchr(str, 'x');
+printf("Search 'x'  : %s\n", ptr ? ptr : "NULL");
 
-	ptr = ft_strchr(str, '\0');
-	printf("Search '\\0' : %s\n", ptr ? "Found end of string" : "NULL");
-	return (0);
+ptr = ft_strchr(str, '\0');
+printf("Search '\\0' : %s\n", ptr ? "Found end of string" : "NULL");
+return (0);
 }*/

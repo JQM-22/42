@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:27:36 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/23 18:34:45 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:34:11 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 #include <stddef.h>
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -19,8 +21,8 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 
 	if (!dst && !src)
 		return (dst);
-	d = (unsigned char *)dst;
-	s = (unsigned char *)src;
+	d = (unsigned char *) dst;
+	s = (unsigned char *) src;
 	i = 0;
 	while (i < n)
 	{
@@ -31,9 +33,9 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 }
 /*
 DESCRIPTION: Copies 'n' bytes from memory area 'src' to memory area 'dst'.
-PARAM: 'dst' -> Pointer to destination, 
-	'src' -> Pointer to source, 
-	'n' -> Byte count.
+PARAM: 'dst' -> Pointer to destination,
+'src' -> Pointer to source,
+'n' -> Byte count.
 RETURN: Pointer to 'dst'.
 
 #include <stdio.h>
@@ -43,12 +45,12 @@ void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 int	main(void)
 {
-	char	src[] = "Hola 42!";
-	char	dst[20];
+char	src[] = "Hola 42!";
+char	dst[20];
 
-	printf("--testing ft_memcpy--\n");
-	ft_memcpy(dst, src, 9);
-	printf("Source     : %s\n", src);
-	printf("Destination: %s\n", dst);
-	return (0);
+printf("--testing ft_memcpy--\n");
+ft_memcpy(dst, src, 9);
+printf("Source     : %s\n", src);
+printf("Destination: %s\n", dst);
+return (0);
 }*/

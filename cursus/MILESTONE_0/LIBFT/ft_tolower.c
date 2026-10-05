@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@alumno.42malaga.co      +#+  +:+       +#+        */
+/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 16:31:01 by joquinta          #+#    #+#             */
-/*   Updated: 2026/09/23 19:16:03 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 19:37:07 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_tolower(int c)
 {
@@ -25,10 +27,10 @@ RETURN: Lowercase equivalent if 'c' was uppercase, 'c' unchanged otherwise.
 
 int	main(void)
 {
-	printf ("--testing ft_tolower--\n");
-	printf ("'A' -> %c\n", ft_tolower('A'));
-	printf ("'Z' -> %c\n", ft_tolower('Z'));
-	printf ("'a' -> %c\n", ft_tolower('a'));
-	printf ("'9' -> %c\n", ft_tolower('9'));
-	return (0);
+printf ("--testing ft_tolower--\n");
+printf ("'A' -> %c\n", ft_tolower('A'));
+printf ("'Z' -> %c\n", ft_tolower('Z'));
+printf ("'a' -> %c\n", ft_tolower('a'));
+printf ("'9' -> %c\n", ft_tolower('9'));
+return (0);
 }*/
