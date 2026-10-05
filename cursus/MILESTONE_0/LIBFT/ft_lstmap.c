@@ -6,7 +6,7 @@
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/02 19:49:45 by username          #+#    #+#             */
-/*   Updated: 2026/10/02 20:16:00 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/05 18:20:15 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 
 	if (!lst || !f || !del)
 		return (NULL);
+	new_lst = NULL;
 	while (lst != NULL)
 	{
 		new_content = f(lst->content);
@@ -31,6 +32,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 			return (NULL);
 		}
 		ft_lstadd_back(&new_lst, new_node);
+		lst = lst->next;
 	}
 	return (new_lst);
 }
