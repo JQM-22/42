@@ -80,6 +80,7 @@ Al compilar tu programa, enlaza la librería estática libft.a:
 
 Bash
 gcc -Wall -Wextra -Werror tu_programa.c -L. -lft -o tu_programa
+
 Recursos
 Referencias y Documentación
 Manuales de C (man pages): Consultas de las funciones estándar mediante la terminal (man memset, man strlcpy).
