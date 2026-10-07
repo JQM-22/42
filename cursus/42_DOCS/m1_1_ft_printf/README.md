@@ -6,5 +6,5 @@ description: >-
 
 # M1\_1\_ft\_printf
 
-{% file src=".gitbook/assets/es.subject _ft_printf.pdf" %}
+{% file src="../.gitbook/assets/es.subject _ft_printf.pdf" %}
 
