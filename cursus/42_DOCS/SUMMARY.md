@@ -50,4 +50,4 @@
     * [ft\_lstmap](M0_LIBFT/3.-funciones-para-manipulacion-de-listas-enlazadas/ft_lstmap.md)
 * [M1\_1\_ft\_printf](M1_1_ft_printf/README.md)
   * [Parte obligatoria](M1_1_ft_printf/parte-obligatoria.md)
-  * [Funciones variádicas](m1_1_ft_printf/funciones-variadicas.md)
+  * [Funciones variádicas](M1_1_ft_printf/funciones-variadicas.md)
