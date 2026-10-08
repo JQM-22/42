@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prinft.c                                        :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/07 18:25:54 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/08 18:41:41 by joquinta         ###   ########.fr       */
+/*   Created: 2026/10/08 18:26:48 by joquinta          #+#    #+#             */
+/*   Updated: 2026/10/08 18:30:28 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include<stdarg.h>
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-int	ft_printf(char const *, ...)
-{
-    va_list lst;
-    
-}
+# include <stdarg.h>
+
+
+#endif
