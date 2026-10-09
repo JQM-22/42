@@ -16,6 +16,8 @@
 3. `ft_printf.h` (Cabecera):
    * Contiene los prototipos de todas las funciones anteriores para que se puedan llamar entre sí sin advertencias del compilador.
 
+Plaintext
+
 ```
                         ┌────────────────────────┐
                         │      ft_printf.h       │
@@ -28,11 +30,17 @@
                         │ (Controlador Principal)│
                         └───────────┬────────────┘
                                     │
-                  ┌─────────────────┼─────────────────┐
+                  ┌─────────────────┴─────────────────┐
                   │   ¿Carácter %   │   Carácter normal
-                  │ + especificador?│   ───────────────► write(1, &c, 1)
+                  │ + especificador?│   ───────────────► write(1, &c, 1)[cite: 8]
                   └────────┬────────┘
                            │
+                           ▼
+                        ┌────────────────────────┐
+                        │    ft_check_format     │
+                        │(Distribuidor / Parseo) │
+                        └───────────┬────────────┘
+                                    │
       ┌────────────────────┼────────────────────┬────────────────────┐
       ▼                    ▼                    ▼                    ▼
 ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
@@ -55,3 +63,41 @@ Como `ft_printf.c` es el "director de orquesta", cuando detecta un `%` evalúa e
 * 📝 Si ve `%s` $$ $\rightarrow$ $$ Llama a `ft_print_str`.
 * 🔢 Si ve `%d`, `%i` o `%u` $$ $\rightarrow$ $$ Llama a `ft_print_nbr`.
 * 🔣 Si ve `%x`, `%X` o `%p` $$ $\rightarrow$ $$ Llama a `ft_print_hex`.
+
+
+
+Para conectar este archivo principal con las funciones auxiliares de forma limpia y sin llenar `ft_printf.c` de muchos `if` (lo que violaría la Norma de 42 📏), la mejor estrategia es usar una función distribuidora / parseadora (por ejemplo, `ft_check_format`).
+
+#### 🛠️ Estrategia de derivación
+
+En lugar de poner los `if` de cada letra (`'c'`, `'s'`, `'d'`, etc.) dentro de `ft_printf`, creamos una función auxiliar que reciba el carácter especificador (`format[i]`) y la lista de argumentos `args`.
+
+**1. La función distribuidora (`ft_check_format`)**
+
+Usamos una estructura `switch` (o varios `if`) dentro de esta función auxiliar para derivar cada caso:
+
+C
+
+```
+int	ft_check_format(char specifier, va_list args)
+{
+	int	count;
+
+	count = 0;
+	if (specifier == 'c')
+		count += ft_print_char(va_arg(args, int));
+	else if (specifier == 's')
+		count += ft_print_str(va_arg(args, char *));
+	else if (specifier == 'd' || specifier == 'i')
+		count += ft_print_nbr(va_arg(args, int));
+	else if (specifier == 'u')
+		count += ft_print_unsigned(va_arg(args, unsigned int));
+	else if (specifier == 'x' || specifier == 'X')
+		count += ft_print_hex(va_arg(args, unsigned int), specifier);
+	else if (specifier == 'p')
+		count += ft_print_ptr(va_arg(args, void *));
+	else if (specifier == '%')
+		count += ft_print_char('%');
+	return (count);
+}
+```
