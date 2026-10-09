@@ -33,7 +33,16 @@ La estructura de ft_printf cuenta con los siguientes archivos principales:
     - ft_print_hex.c: Maneja las conversiones a hexadecimal (base 16), incluyendo letras en mayúsculas/minúsculas y la impresión de direcciones de memoria con su prefijo 0x.
 - Makefile: Encargado de compilar tu librería libftprintf.a. 
 
-![Diagrama de Arquitectura](./diagrama.jpg)
+
+```mermaid
+graph TD
+    A[ft_printf.h] --> B[ft_printf.c]
+    B --> C{ft_check_format}
+    C --> D[ft_print_char <br> %c, %%]
+    C --> E[ft_print_str <br> %s]
+    C --> F[ft_print_nbr <br> %d, %i, %u]
+    C --> G[ft_print_hex <br> %x, %X, %p]
+```
 
 ---
 
