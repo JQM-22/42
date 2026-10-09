@@ -24,9 +24,16 @@ El objetivo principal es comprender y manejar las **funciones variádicas** en C
 
 La estructura de ft_printf cuenta con los siguientes archivos principales:
 - ft_printf.h: El archivo de cabecera con los prototipos de las funciones, las librerías necesarias (<stdarg.h>, <unistd.h>) y la inclusión de libft (si se utiliza).   
-- ft_printf.c: La función principal que recorre la cadena format y gestiona las funciones variádicas (va_start, va_arg, va_end).   
-- Módulos de impresión auxiliaries: Funciones encargadas de procesar cada tipo de conversión especifico (%c, %s, %p, %d/%i, %u, %x/%X).   
+- ft_printf.c: La función principal que recorre la cadena format y gestiona las funciones variádicas (va_start, va_arg, va_end).  
+- ft_check_format.c: La función distribuidora, se encarga de reconocer cada caracter especificador y llamar a las funciones "print" correspondientes. 
+- Módulos de impresión auxiliaries: Funciones encargadas de procesar cada tipo de conversión especifico (%c, %s, %p, %d/%i, %u, %x/%X).
+    - ft_print_char.c: Procesa un único carácter o el escape %%.
+    - ft_print_str.c: Imprime cadenas completas y gestiona casos especiales como punteros a NULL.
+    - ft_print_nbr.c: Gestiona la conversión e impresión de números enteros enteros con y sin signo (base 10).
+    - ft_print_hex.c: Maneja las conversiones a hexadecimal (base 16), incluyendo letras en mayúsculas/minúsculas y la impresión de direcciones de memoria con su prefijo 0x.
 - Makefile: Encargado de compilar tu librería libftprintf.a. 
+
+![Diagrama de Arquitectura](./diagrama.jpg)
 
 ---
 
@@ -71,7 +78,7 @@ En cumplimiento de las normas de integridad del proyecto y de la sección Recurs
 Tareas donde se usó IA: Explicación conceptual sobre cómo funcionan las funciones variádicas (stdarg.h), sugerencias para estructurar la arquitectura de archivos del proyecto y revisión inicial de la plantilla del archivo README.md.   
 Partes del proyecto donde se utilizó: Fase teórica previa y maquetación de la documentación. Todo el código C y la lógica de parseo/impresión han sido analizados, comprendidos e implementados directamente por el estudiante para garantizar un aprendizaje real y preparar la evaluación entre pares y exámenes.
 
-## Elección de Algoritmo y Estructura de DatosEstructura de Datos
+## Elección de Algoritmo y Estructura de Datos
 
 ### Estructura de Datos
 
