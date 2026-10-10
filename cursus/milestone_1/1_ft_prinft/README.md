@@ -134,7 +134,7 @@ gcc -Wall -Wextra -Werror main.c libftprintf.a -o test_printf
 ---
 
 ## Recursos
-Referencias y Documentación: 
+### Referencias y Documentación: 
 - Manual de C para printf: man 3 printf.
 - Documentación oficial de <stdarg.h> y funciones variádicas en C (va_start, va_arg, va_copy, va_end).
 
