@@ -12,13 +12,13 @@ El objetivo principal es comprender y manejar las **funciones variádicas** en C
 
 ### Conversiones Soportadas:
 - `%c`: Imprime un solo carácter.
-- `%s`: Imprime una cadena de caracteres[cite: 10].
-- `%p`: Imprime el puntero `void *` dado como argumento en formato hexadecimal[cite: 10].
-- `%d` / `%i`: Imprime un número entero con signo en base 10[cite: 10].
-- `%u`: Imprime un número decimal sin signo en base 10[cite: 10].
-- `%x`: Imprime un número hexadecimal en base 16 en minúsculas[cite: 10].
-- `%X`: Imprime un número hexadecimal en base 16 en mayúsculas[cite: 10].
-- `%%`: Imprime un símbolo de porcentaje[cite: 10].
+- `%s`: Imprime una cadena de caracteres.
+- `%p`: Imprime el puntero `void *` dado como argumento en formato hexadecimal.
+- `%d` / `%i`: Imprime un número entero con signo en base 10.
+- `%u`: Imprime un número decimal sin signo en base 10.
+- `%x`: Imprime un número hexadecimal en base 16 en minúsculas.
+- `%X`: Imprime un número hexadecimal en base 16 en mayúsculas.
+- `%%`: Imprime un símbolo de porcentaje.
 
 ---
 
