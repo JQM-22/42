@@ -19,6 +19,7 @@ El objetivo principal es comprender y manejar las **funciones variádicas** en C
 - `%x`: Imprime un número hexadecimal en base 16 en minúsculas[cite: 10].
 - `%X`: Imprime un número hexadecimal en base 16 en mayúsculas[cite: 10].
 - `%%`: Imprime un símbolo de porcentaje[cite: 10].
+
 ---
 
 ##  Concepto Clave: Funciones Variádicas (`<stdarg.h>`)
@@ -39,7 +40,7 @@ Para procesar estos argumentos desconocidos en tiempo de compilación, la librer
 
 ---
 
-### Arquitectura del proyecto
+## Arquitectura del proyecto
 
 La estructura de ft_printf cuenta con los siguientes archivos principales:
 - ft_printf.h: El archivo de cabecera con los prototipos de las funciones, las librerías necesarias (<stdarg.h>, <unistd.h>) y la inclusión de libft (si se utiliza). 
@@ -75,6 +76,8 @@ graph TD
     C --> H[ft_print_hex <br> %x, %X]
     C --> I[ft_print_ptr <br> %p]
 ```
+
+---
 
 ## Algoritmo y Estructura de Datos
 
@@ -127,6 +130,8 @@ En Terminal:
 
 gcc -Wall -Wextra -Werror main.c libftprintf.a -o test_printf
 ./test_printf
+
+---
 
 ## Recursos
 Referencias y Documentación: 
