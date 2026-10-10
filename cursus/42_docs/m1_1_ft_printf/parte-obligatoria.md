@@ -1,20 +1,30 @@
 # Parte obligatoria
 
-Nombre de programa libftprintf.a&#x20;
+## Nombre de programa 
 
-Archivos a entregar Makefile, \*.h, _/_.h, \*.c, _/_.c Makefile NAME, all, clean, fclean, re&#x20;
+libftprintf.a
 
-Funciones autorizadas malloc, free, write, va\_start, va\_arg, va\_copy, va\_end Se permite usar libft Yes
+## Archivos a entregar 
+- Makefile, 
+- .h, 
+- .h, 
+- ft_xxx.c, 
+- Makefile NAME, all, clean, fclean, re
 
-&#x20;Descripción Escribe una librería que contenga la función ft\_printf(), que imite el printf() original&#x20;
+Funciones autorizadas malloc, free, write, va\_start, va\_arg, va\_copy, va\_end Se permite usar libft
 
-Se debe reprogramar la función printf() de la libc.&#x20;
+&#x20;Descripción Escribe una librería que contenga la función ft\_printf(), que imite el printf() original
 
-El prototipo de ft\_printf() es: int ft\_printf(char const \*, ...);&#x20;
+Se debe reprogramar la función printf() de la libc.
 
-Estos son los requisitos:&#x20;
+El prototipo de ft\_printf() es:
+```
+int ft\_printf(char const \*, ...);
+```
 
-• No se debe implementar la gestión del ‘buffer’ del printf() original.&#x20;
+## Estos son los requisitos:
+
+• No se debe implementar la gestión del ‘buffer’ del printf() original.
 
 • Se deben implementar las siguientes conversiones: cspdiuxX % • La función se comparará con el printf() original para verificar su comportamiento.&#x20;
 
@@ -26,14 +36,23 @@ Estos son los requisitos:&#x20;
 
 #### Se deben implementar las siguientes conversiones:
 
-\
-• %c para imprimir un solo carácter.\
-• %s para imprimir una cadena de caracteres (como se define por defecto en C).\
-• %p el puntero void \* dado como argumento se imprime en formato hexadecimal.\
-• %d para imprimir un número decimal (base 10).\
-• %i para imprimir un entero en base 10.\
-• %u para imprimir un número decimal (base 10) sin signo.\
-• %x para imprimir un número hexadecimal (base 16) en minúsculas.\
-• %X para imprimir un número hexadecimal (base 16) en mayúsculas.\
+
+\
+• %c para imprimir un solo carácter.
+\
+• %s para imprimir una cadena de caracteres (como se define por defecto en C).
+\
+• %p el puntero void \* dado como argumento se imprime en formato hexadecimal.
+\
+• %d para imprimir un número decimal (base 10).
+\
+• %i para imprimir un entero en base 10.
+\
+• %u para imprimir un número decimal (base 10) sin signo.
+\
+• %x para imprimir un número hexadecimal (base 16) en minúsculas.
+\
+• %X para imprimir un número hexadecimal (base 16) en mayúsculas.
+\
 • % % para imprimir el símbolo del porcentaje.
 
