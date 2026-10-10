@@ -8,7 +8,7 @@
 
 El proyecto **ft_printf** consiste en la reimplementación de la famosa función `printf()` de la librería estándar de C (`libc`). 
 
-El objetivo principal es comprender y manejar las **funciones variádicas** en C (aquellas que aceptan un número indeterminado de argumentos utilizando la librería `<stdarg.h>`)[cite: 1, 3, 8], así como afianzar la gestión de formatos de conversión, punteros y bases numéricas (decimal y hexadecimal).
+El objetivo principal es comprender y manejar las **funciones variádicas** en C (aquellas que aceptan un número indeterminado de argumentos utilizando la librería `<stdarg.h>`), así como afianzar la gestión de formatos de conversión, punteros y bases numéricas (decimal y hexadecimal).
 
 ### Conversiones Soportadas:
 - `%c`: Imprime un solo carácter.
@@ -33,7 +33,8 @@ Para procesar estos argumentos desconocidos en tiempo de compilación, la librer
 
 1. **`va_list`**: Tipo de dato que funciona como un puntero/contenedor que apunta a la lista de argumentos variables.
 2. **`va_start(args, format)`**: Inicializa la lista `args`. Requiere como parámetro el último argumento fijo de la función (`format`) para saber dónde empieza la secuencia de argumentos variables.
-3. **`va_arg(args, tipo)`**: Extrae el siguiente argumento de la lista convirtiéndolo al `tipo` especificado y avanza automáticamente al siguiente argumento. *(Nota: Los tipos pequeños como `char` o `short` se promocionan automáticamente a `int` al pasarse por argumentos variádicos)*.
+3. **`va_arg(args, tipo)`**: Extrae el siguiente argumento de la lista convirtiéndolo al `tipo` especificado y avanza automáticamente al siguiente argumento. 
+*(Nota: Los tipos pequeños como `char` o `short` se promocionan automáticamente a `int` al pasarse por argumentos variádicos)*.
 4. **`va_end(args)`**: Finaliza la lectura y realiza las tareas de limpieza del estado de la lista antes de salir de la función.
 
 ---
@@ -88,8 +89,8 @@ Se utiliza un enfoque iterativo directo apoyado en un contador acumulativo (int 
     Se itera caracter por caracter sobre el string format recibido.   
 
 2. Detección de especificador:
-    - Si se encuentra un caracter común, se escribe directamente en    STDOUT (write(1, ...)) e incrementa el contador.
-    - Si se detecta un %, se consulta el siguiente carácter para identificar la conversión solicitada (c, s, p, d, i, u, x, X, %)[cite: 10].
+    - Si se encuentra un caracter común, se escribe directamente en STDOUT (write(1, ...)) e incrementa el contador.
+    - Si se detecta un %, se consulta el siguiente carácter para identificar la conversión solicitada (c, s, p, d, i, u, x, X, %).
 3. Despacho y Conversión: Se extrae el siguiente argumento utilizando va_arg y se deriva a la función auxiliar correspondiente:   
     - Bases numéricas / Hexadecimal (%x, %X, %p): Se aplica un algoritmo recursivo de división e impresión mediante módulo (base 10 y base 16).
     - Manejo de Casos Nulos: Se comprueban punteros NULL (imprimiendo (null) para %s o (nil)/0x0 para %p según el estándar de la libc)
@@ -128,8 +129,8 @@ gcc -Wall -Wextra -Werror main.c libftprintf.a -o test_printf
 ./test_printf
 
 ## Recursos
-Referencias y Documentación
-- Manual de C para printf: man 3 printf
+Referencias y Documentación: 
+- Manual de C para printf: man 3 printf.
 - Documentación oficial de <stdarg.h> y funciones variádicas en C (va_start, va_arg, va_copy, va_end).
 
 ### Uso de Inteligencia Artificial
