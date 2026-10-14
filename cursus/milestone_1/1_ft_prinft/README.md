@@ -38,6 +38,39 @@ Para procesar estos argumentos desconocidos en tiempo de compilación, la librer
 *(Nota: Los tipos pequeños como `char` o `short` se promocionan automáticamente a `int` al pasarse por argumentos variádicos)*.
 4. **`va_end(args)`**: Finaliza la lectura y realiza las tareas de limpieza del estado de la lista antes de salir de la función.
 
+Estructura de Código para el Manejo de stdarg.h:
+```C
+#include <stdarg.h>
+#include <unistd.h>
+
+int ft_printf(const char *format, ...)
+{
+    va_list	args;
+	int		count;
+	int		i;
+
+	count = 0;
+	va_start(args, format); // 1. Inicializamos la lista
+	
+  i = 0;
+	while (format[i]) // 2. Aquí haremos un bucle recorriendo 'format'
+	{
+		if (format[i] == '%') // Si encontramos '%', usaremos va_arg(args, tipo) para obtener el valor.
+		{
+			i++;
+			count = count + ft_check_format(format[i], args);
+		}
+		else
+		{
+			write(1, &format[i], 1);
+			count++;
+		}
+		i++;
+	}
+	va_end(args); // 3. Limpiamos la lista
+	return (count);
+}
+```
 ---
 
 ## Arquitectura del proyecto
@@ -76,7 +109,26 @@ graph TD
     C --> H[ft_print_hex <br> %x, %X]
     C --> I[ft_print_ptr <br> %p]
 ```
+## Casos Límite (Edge Cases) y Pruebas
 
+Para garantizar que la función se comporte de manera idéntica a la `libc` original y no falle durante las evaluaciones entre pares, se han tenido en cuenta los siguientes casos especiales según el tipo de conversión:
+
+### Casos Críticos por Conversión:
+- **`%s` (Cadenas de caracteres):**
+  - **Puntero `NULL`:** Si la cadena pasada es un puntero nulo, se imprime `(null)` sin provocar un fallo de segmentación (*Segmentation Fault*).
+- **`%p` (Direcciones de memoria / Punteros):**
+  - **Puntero `NULL`:** La dirección recibida es `0x0`. En entornos Linux se imprime `(nil)` y en macOS `0x0` o `0x00`, adaptándose a la `libc` correspondiente.
+  - **Prefijo:** Añade correctamente el prefijo `0x` antes de imprimir la dirección en formato hexadecimal minúscula.
+- **`%d` / `%i` (Enteros con signo):**
+  - **`INT_MIN` (`-2147483648`):** Evita desbordamiento al intentar negativar o positivar el valor directamente, asegurando que se procesen los 10 dígitos correctamente.
+  - **`0`:** Imprime correctamente el carácter `'0'` sin entrar en bucles infinitos o omitir la salida.
+- **`%u` (Enteros sin signo):**
+  - **`UINT_MAX` (`4294967295`):** Manejo correcto del valor máximo de 32 bits sin signo.
+- **`%x` / `%X` (Hexadecimales):**
+  - **`0`:** Debe imprimir un único `'0'` (no `00` ni una cadena vacía).
+
+### Robusteza e Integridad del Retorno:
+- **Conteo Acumulado (`int count`):** Cada función auxiliar devuelve la cantidad exacta de caracteres impresos. Si ocurre un fallo en la llamada al sistema `write`, se detiene la acumulación y se propaga la cuenta correcta de bytes.
 ---
 
 ## Algoritmo y Estructura de Datos
@@ -111,13 +163,15 @@ Para compilar y probar este proyecto necesitarás un entorno Unix con `gcc` o `c
 
 Clona el repositorio e ingresa a la carpeta del proyecto:
 
+```
 git clone <url-del-repositorio>
 cd ft_printf
+```
 
 Para generar la librería estática libftprintf.a, ejecuta:
-
+```
 make
-
+```
 Reglas Disponibles del Makefilemake 
 - make all: Compila el proyecto y genera la librería libftprintf.a.
 - make clean: Elimina los archivos objeto (.o).   
@@ -127,9 +181,50 @@ Reglas Disponibles del Makefilemake
 Compila enlazando con la librería creada:
 
 En Terminal:
-
+```
 gcc -Wall -Wextra -Werror main.c libftprintf.a -o test_printf
 ./test_printf
+```
+## Depuración, Leaks y Testers
+
+### Compilación con Flags de Depuración y AddressSanitizer
+
+Para detectar accesos indebidos a memoria, lecturas fuera de rango o variables no inicializadas durante el desarrollo, se puede compilar un archivo de prueba enlazando la librería con símbolos de depuración (`-g3`) y el analizador `-fsanitize=address`:
+
+```bash
+# Compilar ejecutable con AddressSanitizer (ASan)
+gcc -Wall -Wextra -Werror -g3 -fsanitize=address main.c libftprintf.a -o test_asan
+
+# Ejecutar binario de depuración
+./test_asan
+```
+
+### Detección de Fugas de Memoria con Valgrind
+
+Para comprobar la integridad de la memoria y asegurar que no existen fugas (memory leaks) al procesar punteros o cadenas:
+
+```Bash
+# Compilar ejecutable de prueba con símbolos de depuración
+gcc -Wall -Wextra -Werror -g main.c libftprintf.a -o test_valgrind
+
+# Ejecutar análisis completo de memoria
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_valgrind
+```
+
+### Pruebas Automatizadas con printf_tester
+
+Para validar el comportamiento de la librería frente a la función original de la `libc`, se utiliza el suite de pruebas [printf_tester]
+
+```Bash
+# Clonar el repositorio del tester dentro de la raíz del proyecto
+git clone [https://github.com/Sfabi28/printf_tester.git]
+
+# Acceder al directorio del tester
+cd printf_tester
+
+# Ejecutar la batería completa de pruebas
+bash test.sh
+```
 
 ---
 

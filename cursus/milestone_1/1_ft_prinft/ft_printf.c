@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/07 18:25:54 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/09 19:13:02 by joquinta         ###   ########.fr       */
+/*                                                       :::      ::::::::    */
+/*   ft_printf.c                                       :+:      :+:    :+:    */
+/*                                                   +:+ +:+         +:+      */
+/*   By: joquinta <joquinta@student.42malaga.com>  #+#  +:+       +#+         */
+/*                                               +#+#+#+#+#+   +#+            */
+/*   Created: 2026/10/07 18:25:54 by joquinta         #+#    #+#              */
+/*   Updated: 2026/10/14 13:25:01 by joquinta        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,10 @@ int	ft_printf(char const *format, ...)
 
 	count = 0;
 	va_start(args, format);
-	// 1. Inicializamos la lista
 	i = 0;
-	while (format[i]) // 2. Aquí haremos un bucle recorriendo 'format'
+	while (format[i])
 	{
-		if (format[i] == '%') // Si encontramos '%', usaremos va_arg(args, tipo) para obtener el valor.
+		if (format[i] == '%')
 		{
 			i++;
 			count = count + ft_check_format(format[i], args);
@@ -37,6 +36,5 @@ int	ft_printf(char const *format, ...)
 		i++;
 	}
 	va_end(args);
-	// 3. Limpiamos la lista
 	return (count);
 }
