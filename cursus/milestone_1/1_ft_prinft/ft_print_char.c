@@ -6,14 +6,14 @@
 /*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/09 19:13:32 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/09 19:31:34 by joquinta         ###   ########.fr       */
+/*   Updated: 2026/10/14 19:53:17 by joquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_print_char(char c)
+int	ft_print_char(char c)
 {
-    write(1, &c, 1);
-    return (1);
+	write(1, &c, 1);
+	return (1);
 }

@@ -4,6 +4,24 @@
 
 # ft_printf
 
+## Índice
+
+- [Descripción](#descripción)
+  - [Conversiones Soportadas](#conversiones-soportadas)
+- [Concepto Clave: Funciones Variádicas (`<stdarg.h>`)](#concepto-clave-funciones-variádicas-stdargh)
+- [Arquitectura del proyecto](#arquitectura-del-proyecto)
+  - [Módulos de impresión auxiliares](#módulos-de-impresión-auxiliares-funciones-encargadas-de-procesar-cada-tipo-de-conversión-especifico-c-s-p-di-u-xx)
+  - [Diagrama de flujo](#diagrama-de-flujo)
+- [Casos Límite (Edge Cases) y Pruebas](#casos-límite-edge-cases-y-pruebas)
+- [Algoritmo y Estructura de Datos](#algoritmo-y-estructura-de-datos)
+- [Instrucciones](#instrucciones)
+  - [Requisitos Previos e Instalación](#requisitos-previos-e-instalación)
+  - [Compilación](#compilación)
+- [Depuración, Leaks y Testers](#depuración-leaks-y-testers)
+- [Recursos](#recursos)
+  - [Referencias y Documentación](#referencias-y-documentación)
+  - [Uso de Inteligencia Artificial](#uso-de-inteligencia-artificial)
+
 ## Descripción
 
 El proyecto **ft_printf** consiste en la reimplementación de la famosa función `printf()` de la librería estándar de C (`libc`). 
@@ -38,24 +56,100 @@ Para procesar estos argumentos desconocidos en tiempo de compilación, la librer
 *(Nota: Los tipos pequeños como `char` o `short` se promocionan automáticamente a `int` al pasarse por argumentos variádicos)*.
 4. **`va_end(args)`**: Finaliza la lectura y realiza las tareas de limpieza del estado de la lista antes de salir de la función.
 
-Estructura de Código para el Manejo de stdarg.h:
-```C
-#include <stdarg.h>
-#include <unistd.h>
+---
 
-int ft_printf(const char *format, ...)
+## Arquitectura del proyecto
+
+La estructura de ft_printf cuenta con los siguientes archivos principales:
+
+<details>
+<summary><b>Makefile</b> — Encargado de compilar tu librería libftprintf.a.</summary>
+
+``` 
+NAME		= libftprintf.a
+
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
+AR			= ar rcs
+RM			= rm -f
+
+SRCS		= ft_printf.c \
+			  ft_check_format.c \
+			  ft_print_char.c \
+			  ft_print_str.c \
+			  ft_print_nbr.c \
+			  ft_print_unsigned.c \
+			  ft_print_hex.c \
+			  ft_print_ptr.c
+
+OBJS		= $(SRCS:.c=.o)
+
+# ------------------------------------------------------------------------------
+# REGLAS PRINCIPALES
+# ------------------------------------------------------------------------------
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
+
+%.o: %.c ft_printf.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
+```
+
+</details>
+
+<details>
+<summary><b>ft_printf.h</b> — El archivo de cabecera con los prototipos de las funciones, las librerías necesarias (<stdarg.h>, <unistd.h>) y la inclusión de libft (si se utiliza).</summary>
+
+``` C
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+
+# include <stdarg.h>
+# include <unistd.h>
+# include <limits.h>
+# include <stdint.h>
+
+int	ft_check_format(char sp, va_list args);
+int	ft_print_char(char c);
+int	ft_print_str(char *str);
+int	ft_print_nbr(int n);
+int	ft_print_unsigned(unsigned int n);
+int	ft_print_hex(unsigned int n, char sp);
+int	ft_print_ptr(unsigned long ptr);
+
+#endif
+```
+
+</details> 
+
+<details>
+<summary><b>ft_printf.c</b> - La función principal que recorre la cadena format y gestiona las funciones variádicas (va_start, va_arg, va_end).</summary>
+
+```C
+int	ft_printf(char const *format, ...)
 {
-    va_list	args;
+	va_list	args;
 	int		count;
 	int		i;
 
 	count = 0;
-	va_start(args, format); // 1. Inicializamos la lista
-	
-  i = 0;
-	while (format[i]) // 2. Aquí haremos un bucle recorriendo 'format'
+	va_start(args, format);
+	i = 0;
+	while (format[i])
 	{
-		if (format[i] == '%') // Si encontramos '%', usaremos va_arg(args, tipo) para obtener el valor.
+		if (format[i] == '%')
 		{
 			i++;
 			count = count + ft_check_format(format[i], args);
@@ -67,36 +161,179 @@ int ft_printf(const char *format, ...)
 		}
 		i++;
 	}
-	va_end(args); // 3. Limpiamos la lista
+	va_end(args);
 	return (count);
 }
 ```
----
 
-## Arquitectura del proyecto
+</details>
 
-La estructura de ft_printf cuenta con los siguientes archivos principales:
-- ft_printf.h: El archivo de cabecera con los prototipos de las funciones, las librerías necesarias (<stdarg.h>, <unistd.h>) y la inclusión de libft (si se utiliza). 
+<details>
+<summary><b>ft_check_format.c</b> — La función distribuidora, se encarga de reconocer cada caracter especificador y llamar a las funciones "print" correspondientes.</summary>
 
-- ft_printf.c: La función principal que recorre la cadena format y gestiona las funciones variádicas (va_start, va_arg, va_end).
+``` C
+int	ft_check_format(char sp, va_list args)
+{
+	int	count;
 
-- ft_check_format.c: La función distribuidora, se encarga de reconocer cada caracter especificador y llamar a las funciones "print" correspondientes. 
+	count = 0;
+	if (sp == 'c')
+		count = count + ft_print_char(va_arg(args, int));
+	else if (sp == 's')
+		count = count + ft_print_str(va_arg(args, char *));
+	else if (sp == 'd' || sp == 'i')
+		count = count + ft_print_nbr(va_arg(args, int));
+	else if (sp == 'u')
+		count = count + ft_print_unsigned(va_arg(args, unsigned int));
+	else if (sp == 'x' || sp == 'X')
+		count = count + ft_print_hex(va_arg(args, unsigned int), sp);
+	else if (sp == 'p')
+		count = count + ft_print_ptr(va_arg(args, void *));
+	else if (sp == '%')
+		count = count + ft_print_char('%');
+	return (count);
+}
+```
 
-- Módulos de impresión auxiliaries: Funciones encargadas de procesar cada tipo de conversión especifico (%c, %s, %p, %d/%i, %u, %x/%X).
-    - ft_print_char.c: Procesa un único carácter (%c) o el escape %%.
+</details>  
 
-    - ft_print_str.c: Imprime cadenas completas (%s) y gestiona casos especiales como punteros a NULL.
+### Módulos de impresión auxiliaries: Funciones encargadas de procesar cada tipo de conversión especifico (%c, %s, %p, %d/%i, %u, %x/%X).
 
-    - ft_print_nbr.c: Gestiona la conversión e impresión de números enteros con signo (%d, %i).
+<details>
+<summary><b>ft_print_char.c</b> — Procesa un único carácter (%c) o el escape %%.</summary>
 
-    - ft_print_unsigned.c: Gestiona la conversión e impresión de números enteros sin signo (%u).
+``` C
+int ft_print_char(char c)
+{
+    write(1, &c, 1);
+    return (1);
+}
+```
 
-    - ft_print_hex.c: Maneja las conversiones a hexadecimal en minúsculas y mayúsculas (%x, %X).
+</details>
 
-    - ft_print_ptr.c: Maneja la impresión de direcciones de memoria de punteros (%p) agregando el prefijo 0x.
+<details>
+<summary><b>ft_print_str.c</b> — Imprime cadenas completas (%s) y gestiona casos especiales como punteros a NULL.</summary>
 
-- Makefile: Encargado de compilar tu librería libftprintf.a. 
+``` C
+int	ft_print_str(char *str)
+{
+	int	i;
 
+	if (!str)
+		str = "(null)";
+	i = 0;
+	while (str[i])
+	{
+		write(1, &str[i], 1);
+		i++;
+	}
+	return (i);
+}
+```
+</details>
+
+<details>
+<summary><b>ft_print_nbr.c</b> — Gestiona la conversión e impresión de números enteros con signo (%d, %i).</summary>
+
+``` C
+int	ft_print_nbr(int n)
+{
+	int	count;
+
+	count = 0;
+	if (n == INT_MIN)
+		return (ft_print_str("-2147483648"));
+	if (n < 0)
+	{
+		count = count + (ft_print_char('-'));
+		n = -n;
+	}
+	if (n >= 10)
+	{
+		count = count + ft_print_nbr(n / 10);
+	}
+	else
+	{
+		count = count + ft_print_char((n % 10) + '0');
+	}
+	return (count);
+}
+```
+
+</details>
+
+  <details>
+<summary><b>ft_print_unsigned.c</b> — Gestiona la conversión e impresión de números enteros sin signo (%u).</summary>
+
+``` C
+int	ft_print_unsigned(unsigned int n)
+{
+	int	count;
+
+	count = 0;
+	if (n >= 10)
+		count = count + ft_print_unsigned(n / 10);
+	count = count + ft_print_char((n % 10) + '0');
+	return (count);
+}
+```
+
+</details> 
+
+<details>
+<summary><b>ft_print_hex.c</b> — Maneja las conversiones a hexadecimal en minúsculas y mayúsculas (%x, %X).</summary>
+
+``` C
+int	ft_print_hex(unsigned int n, char sp)
+{
+	int	count;
+	int	rest;
+
+	count = 0;
+	rest = 0;
+	if (n >= 16)
+		count = count + ft_print_hex(n / 16, sp);
+	if ((n % 16) < 10)
+		count = count + ft_print_char((n % 16) + '0');
+	else
+	{
+		if (sp == 'x')
+			count = count + ft_print_char((n % 16 - 10) + 'a');
+		else if (sp == 'X')
+			count = count + ft_print_char((n % 16 - 10) + 'A');
+	}
+	return (count);
+}
+```
+
+</details>
+
+<details>
+<summary><b>ft_print_ptr.c</b> — Maneja la impresión de direcciones de memoria de punteros (%p) agregando el prefijo 0x.</summary>
+
+``` C
+int	ft_print_ptr(unsigned long ptr)
+{
+	int	count;
+
+	count = 0;
+	if (!ptr)
+		return (ft_print_str("(nil)"));
+    count = count + ft_print_str("0x");
+    if (ptr >= 16)
+    count = count + ft_print_ptr(ptr / 16);
+    if (ptr % 16 < 10)
+        count = count + ft_print_char((ptr % 16) + '0');
+    else
+        count = count + ft_print_char((ptr % 16 - 10) - 'a');
+    return (count);
+}
+```
+
+</details>
+  
+## Diagrama de flujo   
 
 ```mermaid
 graph TD
@@ -149,7 +386,7 @@ Se utiliza un enfoque iterativo directo apoyado en un contador acumulativo (int 
 3. Despacho y Conversión: Se extrae el siguiente argumento utilizando va_arg y se deriva a la función auxiliar correspondiente:   
     - Bases numéricas / Hexadecimal (%x, %X, %p): Se aplica un algoritmo recursivo de división e impresión mediante módulo (base 10 y base 16).
     - Manejo de Casos Nulos: Se comprueban punteros NULL (imprimiendo (null) para %s o (nil)/0x0 para %p según el estándar de la libc)
-4. .Retorno: Retorna el valor acumulado del número total de caracteres impresos en pantalla.
+4. Retorno: Retorna el valor acumulado del número total de caracteres impresos en pantalla.
 
 ---
 
@@ -172,11 +409,12 @@ Para generar la librería estática libftprintf.a, ejecuta:
 ```
 make
 ```
-Reglas Disponibles del Makefilemake 
-- make all: Compila el proyecto y genera la librería libftprintf.a.
-- make clean: Elimina los archivos objeto (.o).   
-- make fclean: Elimina los archivos objeto y la librería libftprintf.a.   
-- make re: Ejecuta fclean y vuelve a compilar todo (all).   
+Reglas Disponibles del Makefile
+- make
+	- make all: Compila el proyecto y genera la librería libftprintf.a.
+	- make clean: Elimina los archivos objeto (.o).   
+	- make fclean: Elimina los archivos objeto y la librería libftprintf.a.   
+	- make re: Ejecuta fclean y vuelve a compilar todo (all).   
 
 Compila enlazando con la librería creada:
 
@@ -217,7 +455,7 @@ Para validar el comportamiento de la librería frente a la función original de 
 
 ```Bash
 # Clonar el repositorio del tester dentro de la raíz del proyecto
-git clone [https://github.com/Sfabi28/printf_tester.git]
+git clone https://github.com/Sfabi28/printf_tester.git
 
 # Acceder al directorio del tester
 cd printf_tester
@@ -225,6 +463,73 @@ cd printf_tester
 # Ejecutar la batería completa de pruebas
 bash test.sh
 ```
+### Main de Prueba Personalizado
+
+Para realizar una verificación rápida y comparar la salida y los valores de retorno de `ft_printf` contra el `printf` original de la `libc`, se puede utilizar el siguiente archivo `main.c`:
+
+<details>
+<summary><b>Ver código fuente de main.c de prueba</b></summary>
+
+```c
+#include "ft_printf.h"
+#include <stdio.h>
+#include <limits.h>
+
+void	test_header(const char *title)
+{
+	printf("\n========================================\n");
+	printf("  %s\n", title);
+	printf("========================================\n");
+}
+
+int	main(void)
+{
+	int		res1;
+	int		res2;
+	void	*ptr;
+
+	ptr = &res1;
+	// 1. CARACTERES Y CADENAS (%c, %s, %%)
+	test_header("1. PRUEBAS: %c, %s, %%");
+	res1 = ft_printf("ft_printf : %c | %s | %%\n", 'A', "Hola 42");
+	res2 = printf("   printf : %c | %s | %%\n", 'A', "Hola 42");
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n\n", res1, res2);
+	char	*null_str;
+
+	null_str = NULL;
+	res1 = ft_printf("ft_printf NULL str : %s\n", null_str);
+	res2 = printf("   printf NULL str : %s\n", null_str);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n", res1, res2);
+	// 2. ENTEROS CON SIGNO (%d, %i)
+	test_header("2. PRUEBAS: %d, %i");
+	res1 = ft_printf("ft_printf : %d | %i | %d | %i\n", 0, -42, 1337, INT_MAX);
+	res2 = printf("   printf : %d | %i | %d | %i\n", 0, -42, 1337, INT_MAX);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n\n", res1, res2);
+	res1 = ft_printf("ft_printf INT_MIN : %d\n", INT_MIN);
+	res2 = printf("   printf INT_MIN : %d\n", INT_MIN);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n", res1, res2);
+	// 3. ENTEROS SIN SIGNO (%u)
+	test_header("3. PRUEBAS: %u");
+	res1 = ft_printf("ft_printf : %u | %u\n", 0, UINT_MAX);
+	res2 = printf("   printf : %u | %u\n", 0, UINT_MAX);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n", res1, res2);
+	// 4. HEXADECIMALES (%x, %X)
+	test_header("4. PRUEBAS: %x, %X");
+	res1 = ft_printf("ft_printf : %x | %X | %x\n", 0, 255, 3735928559U);
+	res2 = printf("   printf : %x | %X | %x\n", 0, 255, 3735928559U);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n", res1, res2);
+	// 5. PUNTEROS (%p)
+	test_header("5. PRUEBAS: %p");
+	res1 = ft_printf("ft_printf ptr : %p\n", ptr);
+	res2 = printf("   printf ptr : %p\n", ptr);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n\n", res1, res2);
+	res1 = ft_printf("ft_printf NULL ptr : %p\n", NULL);
+	res2 = printf("   printf NULL ptr : %p\n", NULL);
+	printf("--> Retornos -> ft_printf: %d | printf: %d\n", res1, res2);
+	return (0);
+}
+```
+</details>
 
 ---
 
@@ -232,6 +537,7 @@ bash test.sh
 ### Referencias y Documentación: 
 - Manual de C para printf: man 3 printf.
 - Documentación oficial de <stdarg.h> y funciones variádicas en C (va_start, va_arg, va_copy, va_end).
+- Canal de youtube: Oceano  https://www.youtube.com/@onaecO
 
 ### Uso de Inteligencia Artificial
 En cumplimiento de las normas de integridad del proyecto y de la sección Recursos del Readme:   
