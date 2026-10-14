@@ -1,8 +1,21 @@
 *Este proyecto ha sido creado como parte del currículo de 42 por joquinta.*
 
+---
 # Libft - Tu primera librería en C
+---
 
+## Indice
+
+- [Descripción](#descripción)
+- [Estructura de la Librería](#estructura-de-la-librería)
+  - [1. Funciones de la LibC reescritas](#1-funciones-de-la-libc-reescritas)
+  - [2. Funciones adicionales (Manipulación avanzada y E/S)](#2-funciones-adicionales-manipulación-avanzada-y-es)
+  - [3. Funciones para manipulación de listas enlazadas (Estructura t_list)](#3-funciones-para-manipulación-de-listas-enlazadas-estructura-t_list)
+- [Instrucciones](#instrucciones)
+- [Recursos](#recursos)
+---
 ## Descripción
+---
 
 **Libft** es el primer proyecto individual del currículo principal de la Escuela 42. El objetivo de este proyecto es recodificar una serie de funciones estándar de la librería C (`libc`), así como otras funciones de utilidad adicionales y manipulación de listas enlazadas, que servirán como base para futuros proyectos del programa escolar (como *get_next_line*, *ft_printf*, *push_swap*, entre otros).
 
@@ -14,18 +27,117 @@ A través de la implementación manual de estas funciones, se profundiza en el e
 - Cumplimiento riguroso de normas de programación C (Norminette).
 
 ---
-
 ## Estructura de la Librería
+---
 
 La librería consta de las siguientes funciones organizadas por categorías:
 
-### 1. Funciones de la Libc reescritas
-- **Comprobación de caracteres:** `ft_isalpha`, `ft_isdigit`, `ft_isalnum`, `ft_isascii`, `ft_isprint`.
-- **Conversión de caracteres:** `ft_toupper`, `ft_tolower`.
-- **Manejo de cadenas:** `ft_strlen`, `ft_strchr`, `ft_strrchr`, `ft_strncmp`, `ft_strnstr`, `ft_strlcpy`, `ft_strlcat`.
-- **Manipulación de memoria:** `ft_memset`, `ft_bzero`, `ft_memcpy`, `ft_memmove`, `ft_memchr`, `ft_memcmp`.
-- **Conversión de tipos:** `ft_atoi`.
-- **Reserva de memoria:** `ft_calloc`, `ft_strdup`.
+### 1. Funciones de la LibC reescritas
+- **Comprobación de caracteres:** 
+<details>
+<summary><b>ft_isalpha</b> — Comprueba si el carácter recibido pertenece al alfabeto</summary>
+
+#### Prototipo
+
+```C
+int	ft_isalpha(int c);
+```
+
+#### Descripción
+
+Comprueba si el carácter recibido pertenece al alfabeto, es decir, si es una letra mayúscula (`'A'` a `'Z'`) o minúscula (`'a'` a `'z'`).
+
+#### Parámetros
+
+| **Parámetro** | **Tipo** | **Descripción**                                |
+| ------------- | -------- | ---------------------------------------------- |
+| `c`           | `int`    | Valor ASCII del carácter que se desea evaluar. |
+
+* Aclaración: Se pasa como `int` (en lugar de `char`) para ser compatible con la función estándar de C y permitir evaluar caracteres promocionados a entero o el valor `EOF`.
+
+#### Valor de Retorno
+
+* `1`: Si el carácter es una letra alfabética (`'A'-'Z'` o `'a'-'z'`).
+* `0`: Si el carácter NO es una letra (números, símbolos, espacios, etc.).
+
+#### Casos Límite
+
+* Límites ASCII exactos: `'A'` (65), `'Z'` (90), `'a'` (97) y `'z'` (122) deben devolver `1`.
+* Caracteres justo fuera del rango: Por ejemplo, `'@'` (64) o `'['` (91) deben devolver `0`.
+* Símbolos y números: Caracteres como `'0'`, `' '`, `'\n'` deben devolver `0`.
+
+#### Código Comentado
+
+```C
+int	ft_isalpha(int c)
+{
+	// Comprobamos si 'c' está entre 'A' y 'Z' O entre 'a' y 'z'
+	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+		return (1); // Es una letra
+	return (0); // No es una letra
+}
+```
+
+#### Ejemplo de uso (main)
+
+```C
+#include <stdio.h>
+
+int	ft_isalpha(int c);
+
+int	main(void)
+{
+	printf("-- testing ft_isalpha() --\n");
+	printf("Prueba 'a': %d (Esperado: 1)\n", ft_isalpha('a'));
+	printf("Prueba 'Z': %d (Esperado: 1)\n", ft_isalpha('Z'));
+	printf("Prueba '5': %d (Esperado: 0)\n", ft_isalpha('5'));
+	printf("Prueba '@': %d (Esperado: 0)\n", ft_isalpha('@'));
+	return (0);
+}
+```
+
+</details>
+
+<details>
+<summary><b>ft_isdigit</b> — Breve descripción visible</summary>
+
+### Prototipo y explicación detallada aquí...
+
+</details>
+
+<details>
+<summary><b>ft_nombre_funcion</b> — Breve descripción visible</summary>
+
+### Prototipo y explicación detallada aquí...
+
+</details>
+    - `ft_isdigit`, 
+    - `ft_isalnum`, 
+    - `ft_isascii`, 
+    - `ft_isprint`.
+- **Conversión de caracteres:** 
+    - `ft_toupper`, 
+    - `ft_tolower`.
+- **Manejo de cadenas:** 
+    - `ft_strlen`, 
+    - `ft_strchr`, 
+    - `ft_strrchr`, 
+    - `ft_strncmp`, 
+    - `ft_strnstr`, 
+    - `ft_strlcpy`, 
+    - `ft_strlcat`.
+- **Manipulación de memoria:** 
+    - `ft_memset`, 
+    - `ft_bzero`, 
+    - `ft_memcpy`, 
+    - `ft_memmove`, 
+    - `ft_memchr`, 
+    - `ft_memcmp`.
+- **Conversión de tipos:** 
+    - `ft_atoi`.
+- **Reserva de memoria:** 
+    - `ft_calloc`, 
+    - `ft_strdup`.
 
 ### 2. Funciones adicionales (Manipulación avanzada y E/S)
 - `ft_substr`: Extrae una subcadena de una cadena dada.
@@ -52,16 +164,16 @@ La librería consta de las siguientes funciones organizadas por categorías:
 - `ft_lstmap`: Crea una nueva lista resultante de aplicar una función a cada elemento de la lista original.
 
 ---
-
 ## Instrucciones
+---
 
 ### Compilación e Instalación
 
 Para compilar la librería completa, ejecuta el comando `make` en la raíz del repositorio:
-
+```
 make
 Esto generará el archivo de la librería estática llamada libft.a.
-
+```
 Comandos del Makefile
 - make o make all: Compila todos los archivos fuente .c y genera la librería libft.a.
 - make clean: Elimina todos los archivos objeto (.o) generados durante la compilación.
@@ -74,22 +186,26 @@ Para incluir libft en cualquier otro proyecto en C:
 
 Incluye el archivo de cabecera en tus archivos de código fuente:
 
-C
+```C
 #include "libft.h"
-Al compilar tu programa, enlaza la librería estática libft.a:
-
+Al compilar tu programa, enlaza la librería estática libft.a
+``` 
+```
 Bash
 gcc -Wall -Wextra -Werror tu_programa.c -L. -lft -o tu_programa
+```
+---
+## Recursos
+---
 
-Recursos
-Referencias y Documentación
-Manuales de C (man pages): Consultas de las funciones estándar mediante la terminal (man memset, man strlcpy).
+### Referencias y Documentación
+- Manuales de C (man pages): Consultas de las funciones estándar mediante la terminal (man memset, man strlcpy).
 
-Standard C Library Reference: Documentación de referencia sobre la librería estándar de C (cppreference.com).
+- Standard C Library Reference: Documentación de referencia sobre la librería estándar de C (cppreference.com).
 
-The C Programming Language (Kernighan & Ritchie): Libro de referencia fundamental sobre sintaxis, manejo de punteros y estructuras de datos en C.
+- The C Programming Language (Kernighan & Ritchie): Libro de referencia fundamental sobre sintaxis, manejo de punteros y estructuras de datos en C.
 
-Uso de Inteligencia Artificial (IA)
+### Uso de Inteligencia Artificial (IA)
 En cumplimiento con los requisitos de transparencia del proyecto, la IA (modelo de lenguaje) se ha utilizado exclusivamente como asistente pedagógico y tutor de aprendizaje, aplicando el siguiente enfoque:
 
 Explicación teórica de conceptos: Para entender en detalle el funcionamiento interno de la gestión de memoria (memset, memcpy, el solapamiento en memmove), el comportamiento de strlcat y el manejo de punteros dobles en listas enlazadas.
