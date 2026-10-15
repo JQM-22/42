@@ -115,6 +115,10 @@ re: fclean all
 # include <limits.h>
 # include <stdint.h>
 
+/* PRINCIPAL FUNTION*/
+int	ft_printf(char const *format, ...);
+
+/* AUX FUNTIONS*/
 int	ft_check_format(char sp, va_list args);
 int	ft_print_char(char c);
 int	ft_print_str(char *str);
