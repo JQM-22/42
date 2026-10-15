@@ -7,20 +7,14 @@
 ## Índice
 
 - [Descripción](#descripción)
-  - [Conversiones Soportadas](#conversiones-soportadas)
 - [Concepto Clave: Funciones Variádicas (`<stdarg.h>`)](#concepto-clave-funciones-variádicas-stdargh)
 - [Arquitectura del proyecto](#arquitectura-del-proyecto)
-  - [Módulos de impresión auxiliares](#módulos-de-impresión-auxiliares-funciones-encargadas-de-procesar-cada-tipo-de-conversión-especifico-c-s-p-di-u-xx)
-  - [Diagrama de flujo](#diagrama-de-flujo)
+- [Diagrama de flujo](#diagrama-de-flujo)
 - [Casos Límite (Edge Cases) y Pruebas](#casos-límite-edge-cases-y-pruebas)
 - [Algoritmo y Estructura de Datos](#algoritmo-y-estructura-de-datos)
 - [Instrucciones](#instrucciones)
-  - [Requisitos Previos e Instalación](#requisitos-previos-e-instalación)
-  - [Compilación](#compilación)
 - [Depuración, Leaks y Testers](#depuración-leaks-y-testers)
 - [Recursos](#recursos)
-  - [Referencias y Documentación](#referencias-y-documentación)
-  - [Uso de Inteligencia Artificial](#uso-de-inteligencia-artificial)
 
 ## Descripción
 
@@ -144,17 +138,19 @@ int	ft_printf(char const *format, ...)
 	int		count;
 	int		i;
 
+	if (!format)
+		return (-1);
 	count = 0;
 	va_start(args, format);
 	i = 0;
 	while (format[i])
 	{
-		if (format[i] == '%')
+		if (format[i] == '%' && format[i + 1] != '\0')
 		{
 			i++;
 			count = count + ft_check_format(format[i], args);
 		}
-		else
+		else if (format[i] != '%')
 		{
 			write(1, &format[i], 1);
 			count++;
@@ -188,7 +184,7 @@ int	ft_check_format(char sp, va_list args)
 	else if (sp == 'x' || sp == 'X')
 		count = count + ft_print_hex(va_arg(args, unsigned int), sp);
 	else if (sp == 'p')
-		count = count + ft_print_ptr(va_arg(args, void *));
+		count = count + ft_print_ptr((unsigned long) va_arg(args, void *));
 	else if (sp == '%')
 		count = count + ft_print_char('%');
 	return (count);
@@ -250,13 +246,8 @@ int	ft_print_nbr(int n)
 		n = -n;
 	}
 	if (n >= 10)
-	{
-		count = count + ft_print_nbr(n / 10);
-	}
-	else
-	{
-		count = count + ft_print_char((n % 10) + '0');
-	}
+		count = count + (ft_print_nbr(n / 10));
+	count = count + ft_print_char((n % 10) + '0');
 	return (count);
 }
 ```
@@ -317,17 +308,18 @@ int	ft_print_ptr(unsigned long ptr)
 {
 	int	count;
 
-	count = 0;
 	if (!ptr)
 		return (ft_print_str("(nil)"));
-    count = count + ft_print_str("0x");
-    if (ptr >= 16)
-    count = count + ft_print_ptr(ptr / 16);
-    if (ptr % 16 < 10)
-        count = count + ft_print_char((ptr % 16) + '0');
-    else
-        count = count + ft_print_char((ptr % 16 - 10) - 'a');
-    return (count);
+	count = 0;
+	if (ptr >= 16)
+		count = count + ft_print_ptr(ptr / 16);
+	else
+		count = count + ft_print_str("0x");
+	if ((ptr % 16) < 10)
+		count = count + ft_print_char((ptr % 16) + '0');
+	else
+		count = count + ft_print_char((ptr % 16 - 10) + 'a');
+	return (count);
 }
 ```
 
@@ -461,7 +453,7 @@ git clone https://github.com/Sfabi28/printf_tester.git
 cd printf_tester
 
 # Ejecutar la batería completa de pruebas
-bash test.sh
+make
 ```
 ### Main de Prueba Personalizado
 

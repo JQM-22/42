@@ -6,7 +6,7 @@
 /*   By: joquinta <joquinta@student.42malaga.com>  #+#  +:+       +#+         */
 /*                                               +#+#+#+#+#+   +#+            */
 /*   Created: 2026/10/09 19:48:00 by joquinta         #+#    #+#              */
-/*   Updated: 2026/10/13 19:15:15 by joquinta        ###   ########.fr        */
+/*   Updated: 2026/10/15 17:56:10 by joquinta        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_print_nbr(int n)
 		count = count + (ft_print_char('-'));
 		n = -n;
 	}
-	if (n > 10)
+	if (n >= 10)
 		count = count + (ft_print_nbr(n / 10));
 	count = count + ft_print_char((n % 10) + '0');
 	return (count);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/07 18:25:54 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/14 20:12:40 by joquinta         ###   ########.fr       */
+/*                                                       :::      ::::::::    */
+/*   ft_printf.c                                       :+:      :+:    :+:    */
+/*                                                   +:+ +:+         +:+      */
+/*   By: joquinta <joquinta@student.42malaga.com>  #+#  +:+       +#+         */
+/*                                               +#+#+#+#+#+   +#+            */
+/*   Created: 2026/10/07 18:25:54 by joquinta         #+#    #+#              */
+/*   Updated: 2026/10/15 18:10:17 by joquinta        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,19 @@ int	ft_printf(char const *format, ...)
 	int		count;
 	int		i;
 
+	if (!format)
+		return (-1);
 	count = 0;
 	va_start(args, format);
 	i = 0;
 	while (format[i])
 	{
-		if (format[i] == '%')
+		if (format[i] == '%' && format[i + 1] != '\0')
 		{
 			i++;
 			count = count + ft_check_format(format[i], args);
 		}
-		else
+		else if (format[i] != '%')
 		{
 			write(1, &format[i], 1);
 			count++;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/08 18:26:48 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/14 19:55:06 by joquinta         ###   ########.fr       */
+/*                                                       :::      ::::::::    */
+/*   ft_printf.h                                       :+:      :+:    :+:    */
+/*                                                   +:+ +:+         +:+      */
+/*   By: joquinta <joquinta@student.42malaga.com>  #+#  +:+       +#+         */
+/*                                               +#+#+#+#+#+   +#+            */
+/*   Created: 2026/10/08 18:26:48 by joquinta         #+#    #+#              */
+/*   Updated: 2026/10/15 18:48:47 by joquinta        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <limits.h>
 # include <stdint.h>
 
+/* PRINCIPAL FUNTION*/
+int	ft_printf(char const *format, ...);
+
+/* AUX FUNTIONS*/
 int	ft_check_format(char sp, va_list args);
 int	ft_print_char(char c);
 int	ft_print_str(char *str);

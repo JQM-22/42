@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_check_format.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/09 17:50:27 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/14 19:55:20 by joquinta         ###   ########.fr       */
+/*                                                       :::      ::::::::    */
+/*   ft_check_format.c                                 :+:      :+:    :+:    */
+/*                                                   +:+ +:+         +:+      */
+/*   By: joquinta <joquinta@student.42malaga.com>  #+#  +:+       +#+         */
+/*                                               +#+#+#+#+#+   +#+            */
+/*   Created: 2026/10/09 17:50:27 by joquinta         #+#    #+#              */
+/*   Updated: 2026/10/15 17:05:24 by joquinta        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_check_format(char sp, va_list args)
 	else if (sp == 'x' || sp == 'X')
 		count = count + ft_print_hex(va_arg(args, unsigned int), sp);
 	else if (sp == 'p')
-		count = count + ft_print_ptr(va_arg(args, void *));
+		count = count + ft_print_ptr((unsigned long) va_arg(args, void *));
 	else if (sp == '%')
 		count = count + ft_print_char('%');
 	return (count);
