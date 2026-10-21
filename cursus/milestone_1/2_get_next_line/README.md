@@ -5,7 +5,8 @@
 ## Índice
 
 - [Descripción](#descripción)
-- [Concepto Clave: Variables Estáticas (`static`)](#concepto-clave-variables-estáticas-static)
+- [Concepto Clave 1: Variables Estáticas (`static`)](#concepto-clave-1-variables-estáticas-static)
+- [Concepto Clave 2: Descriptores de Archivo (`File Descriptors` / `fd`)](#concepto-clave-2-descriptores-de-archivo-file-descriptors--fd)
 - [Arquitectura del proyecto](#arquitectura-del-proyecto)
 - [Diagrama de flujo](#diagrama-de-flujo)
 - [Casos Límite (Edge Cases) y Pruebas](#casos-límite-edge-cases-y-pruebas)
@@ -33,7 +34,7 @@ El objetivo principal es:
 
 ---
 
-## Concepto Clave: Variables Estáticas (`static`)
+## Concepto Clave 1: Variables Estáticas (`static`)
 
 A diferencia de las variables locales comunes (que residen en la pila o *stack* y se destruyen al salir de la función), una **variable estática** declarada dentro de una función se almacena en el segmento de datos del programa. Esto le otorga dos propiedades fundamentales:
 
@@ -53,6 +54,28 @@ En **Get Next Line**, la variable estática actúa como un **acumulador o reserv
 Dado que `read()` lee en bloques de tamaño dinámico `BUFFER_SIZE` (que puede ser de 1, 42 o 10,000,000 bytes), es muy probable que una sola lectura devuelva más de una línea o deje media línea pendiente. 
 La variable estática permite "recordar" ese fragmento leído pero no entregado para utilizarlo en la siguiente llamada.
 
+## Concepto Clave 2: Descriptores de Archivo (`File Descriptors` / `fd`)
+
+Un **File Descriptor (FD)** o *descriptor de archivo* es un número entero no negativo (`int`) que el sistema operativo asigna a una entrada, salida o archivo en el momento en que este es abierto. 
+
+En un sistema operativo tipo Unix/Linux, casi todo se trata como un archivo. Tú no manipulas un archivo usando su ruta o su nombre directamente en memoria; en su lugar, le pides al kernel que lo abra y este te devuelve un entero (`fd`) que funciona como su "llave" o identificador.
+
+### Descriptores Reservados por el Sistema:
+Por defecto, todo proceso en C se inicia con 3 descriptores de archivo estándar ya abiertos:
+- **`0` (`STDIN_FILENO`)**: Entrada estándar (normalmente el teclado).
+- **`1` (`STDOUT_FILENO`)**: Salida estándar (la terminal/pantalla).
+- **`2` (`STDERR_FILENO`)**: Salida de errores estándar (la terminal/pantalla).
+
+Cualquier archivo adicional que abras con la función `open()` recibirá el siguiente entero disponible en la tabla de descriptores de tu proceso (por ejemplo, `3`, `4`, `5`...).
+
+---
+
+### Importancia de los FDs en Get Next Line:
+
+1. **Parámetro de `read()`:** La función `get_next_line(int fd)` recibe el descriptor del cual debe leer. Este entero se pasa directamente a la llamada al sistema `read(fd, buffer, BUFFER_SIZE)` para indicarle al sistema operativo de dónde extraer los bytes.
+2. **Cursor Interno del Sistema:** El sistema operativo mantiene de forma transparente un "cursor de lectura" asociado al `fd`. Cada vez que `read()` lee un bloque de bytes, este cursor avanza automáticamente en el archivo. Por ello, llamadas sucesivas a `read()` sobre el mismo `fd` continúan la lectura exactamente donde terminó la anterior.
+3. **Validación de Parámetros:** Si se pasa un `fd` negativo (como `-1`, que es el valor que devuelve `open()` cuando falla al abrir un archivo) o un número que no corresponde a ningún archivo abierto, la función debe detectar la invalidez y retornar `NULL` de inmediato.
+4. **Soporte Multidiscriptor (Bonus):** En la parte bonus, el valor de `fd` se utiliza directamente como **índice** dentro de un arreglo estático de punteros (`static char *stash[1024]`). Esto permite gestionar múltiples archivos abiertos de forma simultánea, manteniendo el *stash* de cada descriptor aislado en su propia posición del array sin perder el hilo de lectura de ningún archivo.
 ---
 
 ## Arquitectura del proyecto
