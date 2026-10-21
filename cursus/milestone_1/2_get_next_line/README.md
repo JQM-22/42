@@ -286,18 +286,18 @@ char	*get_next_line(int fd)
 
 ```mermaid
 graph TD
-    A[get_next_line - fd] --> B{¿fd inválido o <br> BUFFER_SIZE <= 0?}
+    A[get_next_line - fd] --> B[¿fd inválido o <br> BUFFER_SIZE <= 0?]
     B -- Sí --> C[Retornar NULL]
     B -- No --> D[read_to_stash]
     
-    D --> E{¿stash contiene '\n' <br> o read devolvió 0?}
+    D --> E[¿stash contiene '\n' <br> o read devolvió 0?]
     E -- No --> F["read(fd, buffer, BUFFER_SIZE)"]
-    F --> G{¿bytes leídos == -1?}
+    F --> G[¿bytes leídos == -1?]
     G -- Sí (Error) --> H[Liberar buffer y stash] --> C
     G -- No --> I["Concatenar buffer a stash (ft_strjoin)"] --> E
 
     E -- Sí --> J[Liberar buffer de lectura]
-    J --> K{¿stash está vacío?}
+    J --> K[¿stash está vacío?]
     K -- Sí (EOF) --> C
     K -- No --> L[extract_line: Copiar hasta '\n']
     L --> M[clean_stash: Conservar resto en stash]
