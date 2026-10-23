@@ -91,19 +91,26 @@ La estructura de **Get Next Line** cuenta con los siguientes archivos principale
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stddef.h>
 
-# fndef BUFFER_SIZE
+# ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
 
-/* FUNCIÓN PRINCIPAL */
+/* MAIN FUNCTION */
 char	*get_next_line(int fd);
 
-/* FUNCIONES AUXILIARES */
-size_t	ft_strlen(const char *s);
+/* SUB FUNCTIONS*/
+static char	*read_to_stash(int fd, char *stash);
+static char	*extract_line(char *stash);
+static char	*clean_stash(char *stash);
+
+/* AUX FT_FUNCTIONS */
 char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t	ft_strlen(const char *str);
+char	*ft_strdup(const char *s1);
 
 #endif
 ```
@@ -114,62 +121,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 ```c
 #include "get_next_line.h"
-
-static char	*read_to_stash(int fd, char *stash)
-{
-	char	*buffer;
-	int		bytes_read;
-
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (free(stash), NULL);
-	bytes_read = 1;
-	while (!ft_strchr(stash, '\n') && bytes_read > 0)
-	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (free(buffer), free(stash), NULL);
-		buffer[bytes_read] = '\0';
-		stash = ft_strjoin(stash, buffer);
-	}
-	free(buffer);
-	return (stash);
-}
-```s
-```c
-static char	*extract_line(char *stash)
-{
-	int		i;
-	char	*line;
-
-	if (!stash || !*stash)
-		return (NULL);
-	i = 0;
-	while (stash[i] && stash[i] != '\n')
-		i++;
-	if (stash[i] == '\n')
-		line = ft_substr(stash, 0, i + 1);
-	else
-		line = ft_substr(stash, 0, i);
-	return (line);
-}
 ```
-```c
-static char	*clean_stash(char *stash)
-{
-	int		i;
-	char	*new_stash;
 
-	i = 0;
-	while (stash[i] && stash[i] != '\n')
-		i++;
-	if (!stash[i])
-		return (free(stash), NULL);
-	new_stash = ft_substr(stash, i + 1, ft_strlen(stash) - i);
-	free(stash);
-	return (new_stash);
-}
-```
 ```c
 char	*get_next_line(int fd)
 {
@@ -178,12 +131,85 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+	if (!stash)
+		stash = ft_strdup("");
 	stash = read_to_stash(fd, stash);
 	if (!stash)
 		return (NULL);
 	line = extract_line(stash);
 	stash = clean_stash(stash);
 	return (line);
+}
+```
+
+```c
+static char	*read_to_stash(int fd, char *stash)
+{
+	int		bytes_read;
+	char	*buffer;
+
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	bytes_read = 1;
+	while (!ft_strchr(stash, '\n') && bytes_read > 0)
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(buffer);
+			free(stash);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		stash = ft_strjoin(stash, buffer);
+	}
+	return (free(buffer), stash);
+}
+```
+
+```c
+static char	*extract_line(char *stash)
+{
+	int		len;
+	char	*line;
+
+	if (!stash || !*stash)
+		return (NULL);
+	len = 0;
+	while (stash[len] != '\n' && stash[len] != '\0')
+		len++;
+	if (stash[len] == '\n')
+		len++;
+	line = ft_substr(stash, 0, len);
+	if (!line)
+		return (NULL);
+	return (line);
+}
+```
+
+```c
+static char	*clean_stash(char *stash)
+{
+	int		i;
+	int		len;
+	char	*rest;
+
+	i = 0;
+	while (stash[i] != '\n' && stash[i] != '\0')
+		i++;
+	if (stash[i] == '\n')
+		i++;
+	if (stash[i] == '\0')
+	{
+		free(stash);
+		return (NULL);
+	}
+	else
+	{
+		len = ft_strlen(stash);
+		rest = ft_substr(stash, i, len);
+		free(stash);
+		return (rest);
+	}
 }
 ```
 </details>
@@ -193,7 +219,9 @@ char	*get_next_line(int fd)
 
 ```c
 #include "get_next_line.h"
+```
 
+```c
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -313,7 +341,7 @@ graph TD
     B -- Sí --> C[Retornar NULL]
     B -- No --> D[read_to_stash]
     
-    D --> E[¿stash contiene '\n' <br> o read devolvió 0?]
+    D --> E[¿stash contiene 'salto de linea' <br> o read devolvió 0?]
     E -- No --> F["read(fd, buffer, BUFFER_SIZE)"]
     F --> G[¿bytes leídos == -1?]
     G -- Sí (Error) --> H[Liberar buffer y stash] --> C
@@ -322,9 +350,37 @@ graph TD
     E -- Sí --> J[Liberar buffer de lectura]
     J --> K[¿stash está vacío?]
     K -- Sí (EOF) --> C
-    K -- No --> L[extract_line: Copiar hasta '\n']
+    K -- No --> L[extract_line: Copiar hasta 'salto de linea']
     L --> M[clean_stash: Conservar resto en stash]
     M --> N([Retornar línea extraída])
+
+```
+### Diagrama explicativo del funcionamiento basico
+
+```mermaid
+graph TD
+    %% Componentes principales
+    A[📄 Archivo en Disco / fd] -->|read| B[🥛 buffer: Vaso Temporal]
+    
+    subgraph Memoria Dinámica Temporal
+        B
+    end
+
+    subgraph Memoria Estática Persistente
+        C[🛢️ stash: Barril Acumulador]
+    end
+
+    B -->|ft_strjoin| C
+    
+    %% Extracción
+    C -->|Extracción hasta 'salto de linea'| D[🥛✨ line: Vaso Servido]
+    
+    %% Limpieza separada para evitar solapamientos
+    C --> E_clean[🧹 clean_stash: Cortar sobrante]
+    E_clean -->|Guardar resto| C
+
+    %% Salida final
+    D --> E([Return a la función])
 
 ```
 
