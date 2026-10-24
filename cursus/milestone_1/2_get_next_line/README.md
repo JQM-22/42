@@ -100,11 +100,6 @@ La estructura de **Get Next Line** cuenta con los siguientes archivos principale
 /* MAIN FUNCTION */
 char	*get_next_line(int fd);
 
-/* SUB FUNCTIONS*/
-static char	*read_to_stash(int fd, char *stash);
-static char	*extract_line(char *stash);
-static char	*clean_stash(char *stash);
-
 /* AUX FT_FUNCTIONS */
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -121,6 +116,10 @@ char	*ft_strdup(const char *s1);
 
 ```c
 #include "get_next_line.h"
+
+static char	*read_to_stash(int fd, char *stash);
+static char	*extract_line(char *stash);
+static char	*clean_stash(char *stash);
 ```
 
 ```c
@@ -133,10 +132,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (!stash)
 		stash = ft_strdup("");
+	if (!stash)
+		return(NULL);
 	stash = read_to_stash(fd, stash);
 	if (!stash)
-		return (NULL);
+		return(NULL);
 	line = extract_line(stash);
+	if (!line)
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
 	stash = clean_stash(stash);
 	return (line);
 }
@@ -147,20 +154,23 @@ static char	*read_to_stash(int fd, char *stash)
 {
 	int		bytes_read;
 	char	*buffer;
+	char	*tmp;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if(!buffer)
+		return(free(stash), NULL);
 	bytes_read = 1;
-	while (!ft_strchr(stash, '\n') && bytes_read > 0)
+	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-		{
-			free(buffer);
-			free(stash);
-			return (NULL);
-		}
+			return (free(buffer), free(stash), NULL);
 		buffer[bytes_read] = '\0';
-		stash = ft_strjoin(stash, buffer);
+		tmp = stash;
+		stash = ft_strjoin(tmp, buffer);
+		free(tmp);
+		if(ft_strchr(buffer, '\n'))
+			break;
 	}
 	return (free(buffer), stash);
 }
@@ -180,8 +190,6 @@ static char	*extract_line(char *stash)
 	if (stash[len] == '\n')
 		len++;
 	line = ft_substr(stash, 0, len);
-	if (!line)
-		return (NULL);
 	return (line);
 }
 ```
@@ -190,26 +198,20 @@ static char	*extract_line(char *stash)
 static char	*clean_stash(char *stash)
 {
 	int		i;
-	int		len;
 	char	*rest;
 
 	i = 0;
 	while (stash[i] != '\n' && stash[i] != '\0')
-		i++;
+		i++;	
+	if (stash[i] == '\0')
+		return (free(stash), NULL);
 	if (stash[i] == '\n')
 		i++;
-	if (stash[i] == '\0')
-	{
-		free(stash);
-		return (NULL);
-	}
-	else
-	{
-		len = ft_strlen(stash);
-		rest = ft_substr(stash, i, len);
-		free(stash);
-		return (rest);
-	}
+	rest = ft_substr(stash, i, ft_strlen(stash) - i);
+	free(stash);
+	if (!rest || !*rest)
+		return (free(rest), NULL);		
+	return(rest);
 }
 ```
 </details>
@@ -222,87 +224,112 @@ static char	*clean_stash(char *stash)
 ```
 
 ```c
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
-	if (!s)
+	if (!str)
 		return (0);
 	i = 0;
-	while (s[i])
+	while (str[i] != '\0')
+	{
 		i++;
+	}
 	return (i);
 }
 ```
 ```c
 char	*ft_strchr(const char *s, int c)
 {
+	int	i;
+
 	if (!s)
-		return (NULL);
-	while (*s)
+		return (0);
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		if (s[i] == (char) c)
+			return ((char *) & s[i]);
+		i++;
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	if (s[i] == (char) c)
+		return ((char *) & s[i]);
+	return (0);
 }
 ```
 ```c
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*str;
+	char	*s_res;
 	size_t	i;
 	size_t	j;
 
-	if (!s1)
+	if (!s1 || !s2)
+		return (NULL);	
+	s_res = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (s_res == NULL)
+		return (NULL);
+	i = 0;
+	while (s1[i])
 	{
-		s1 = malloc(1 * sizeof(char));
-		if (!s1)
-			return (NULL);
-		s1[0] = '\0';
+		s_res[i] = s1[i];
+		i++;
 	}
-	if (!s2)
-		return (free(s1), NULL);
-	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
-		return (free(s1), NULL);
-	i = -1;
-	while (s1[++i])
-		str[i] = s1[i];
-	j = -1;
-	while (s2[++j])
-		str[i + j] = s2[j];
-	str[i + j] = '\0';
-	free(s1);
-	return (str);
+	j = 0;
+	while (s2[j])
+	{
+		s_res[i] = s2[j];
+		j++;
+		i++;
+	}
+	s_res[i] = '\0';
+	return (s_res);
 }
 ```
 ```c
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*str;
 	size_t	i;
+	size_t	s_len;
+	char	*sub;
 
 	if (!s)
 		return (NULL);
-	if (start >= ft_strlen(s))
-		return (NULL);
-	if (len > ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
-	str = malloc(sizeof(char) * (len + 1));
-	if (!str)
+	s_len = ft_strlen(s);
+	if (start >= s_len)
+		return (ft_strdup(""));
+	if (len > s_len - start)
+		len = s_len - start;
+	sub = (char *) malloc(sizeof(char) * (len + 1));
+	if (!sub)
 		return (NULL);
 	i = 0;
 	while (i < len && s[start + i])
 	{
-		str[i] = s[start + i];
+		sub[i] = s[start + i];
 		i++;
 	}
-	str[i] = '\0';
-	return (str);
+	sub[i] = '\0';
+	return (sub);
+}
+```
+```c
+char	*ft_strdup(const char *s1)
+{
+	int		i;
+	char	*mem;
+
+	mem = malloc((ft_strlen(s1) + 1) * sizeof(char));
+	if (mem == NULL)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		mem[i] = s1[i];
+		i++;
+	}
+	mem[i] = '\0';
+	return (mem);
 }
 ```
 </details>
@@ -382,6 +409,14 @@ graph TD
     %% Salida final
     D --> E([Return a la función])
 
+```
+
+```mermaid
+flowchart TD
+    A["get_next_line(fd)"] --> B["1. ACUMULAR<br>read_to_stash: lee trozos con read()<br>y los añade a 'stash' hasta hallar un 'salto de linea'"]
+    B --> C["2. EXTRAER<br>extract_line: corta desde el inicio hasta el<br>'salto de linea' (o EOF) para crear la línea a devolver"]
+    C --> D["3. LIMPIAR<br>clean_stash: recorta lo que sobró tras el<br>'salto de linea' y lo guarda en 'stash' para la próxima"]
+    D --> E["Retorna la línea 🚀"]
 ```
 
 ---
