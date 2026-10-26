@@ -156,22 +156,26 @@ static char	*read_to_stash(int fd, char *stash)
 	char	*buffer;
 	char	*tmp;
 
+	if (ft_strchr(stash, '\n'))
+		return (stash);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if(!buffer)
-		return(free(stash), NULL);
+	if (!buffer)
+		return (free(stash), NULL);
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (free(buffer), free(stash), NULL);
+		if (bytes_read <= 0)
+			break ;
 		buffer[bytes_read] = '\0';
 		tmp = stash;
 		stash = ft_strjoin(tmp, buffer);
 		free(tmp);
-		if(ft_strchr(buffer, '\n'))
-			break;
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
+	if (bytes_read == -1)
+		return (free(buffer), free(stash), NULL);
 	return (free(buffer), stash);
 }
 ```
@@ -337,20 +341,32 @@ char	*ft_strdup(const char *s1)
 <details>
 <summary><b>get_next_line_bonus.c</b> — El archivo que contempla la opcion bonus del proyecto.</summary>
 
+Para no generar un error en el conteo de "static" del tester Francinette, en esta version Bonus, se requiere usar las unciones sin static, y mantener solo la variable static. 
+
 ```c
 #include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
-	static char	*stash[1024]; // Soporte para múltiples FDs usando un arreglo de punteros
+	static char	*stash[1024];
 	char		*line;
 
 	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!stash[fd])
+		stash[fd] = ft_strdup("");
+	if (!stash[fd])
 		return (NULL);
 	stash[fd] = read_to_stash(fd, stash[fd]);
 	if (!stash[fd])
 		return (NULL);
 	line = extract_line(stash[fd]);
+	if (!line)
+	{
+		free(stash[fd]);
+		stash[fd] = NULL;
+		return (NULL);
+	}
 	stash[fd] = clean_stash(stash[fd]);
 	return (line);
 }
@@ -383,33 +399,6 @@ graph TD
 
 ```
 ### Diagrama explicativo del funcionamiento basico
-
-```mermaid
-graph TD
-    %% Componentes principales
-    A[📄 Archivo en Disco / fd] -->|read| B[🥛 buffer: Vaso Temporal]
-    
-    subgraph Memoria Dinámica Temporal
-        B
-    end
-
-    subgraph Memoria Estática Persistente
-        C[🛢️ stash: Barril Acumulador]
-    end
-
-    B -->|ft_strjoin| C
-    
-    %% Extracción
-    C -->|Extracción hasta 'salto de linea'| D[🥛✨ line: Vaso Servido]
-    
-    %% Limpieza separada para evitar solapamientos
-    C --> E_clean[🧹 clean_stash: Cortar sobrante]
-    E_clean -->|Guardar resto| C
-
-    %% Salida final
-    D --> E([Return a la función])
-
-```
 
 ```mermaid
 flowchart TD
@@ -545,16 +534,20 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_valg
 
 Puedes validar tu código contra suites de pruebas populares para este proyecto:
 
+
+### Tripouille
 ```bash
-# gnlTester de Tripouille
-git clone [https://github.com/Tripouille/gnlTester.git](https://github.com/Tripouille/gnlTester.git)
+git clone https://github.com/Tripouille/gnlTester.git gnlTester
 cd gnlTester
 make m # Para la parte obligatoria
 make b # Para la parte bonus
+```
 
-# gnl-war-machine
-git clone [https://github.com/olehs/gnltester.git](https://github.com/olehs/gnltester.git)
-
+### Francinette
+```bash
+bash -c "$(curl -fsSL https://raw.github.com/xicodomingues/francinette/master/bin/install.sh)"
+paco    # Para la parte obligatoria
+paco -s # Para la parte bonus
 ```
 
 ### Main de Prueba Personalizado

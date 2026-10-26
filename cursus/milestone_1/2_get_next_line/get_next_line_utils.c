@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joquinta <joquinta@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/21 18:39:13 by joquinta          #+#    #+#             */
-/*   Updated: 2026/10/24 19:43:39 by joquinta         ###   ########.fr       */
+/*                                                       :::      ::::::::    */
+/*   get_next_line_utils.c                             :+:      :+:    :+:    */
+/*                                                   +:+ +:+         +:+      */
+/*   By: joquinta <joquinta@student.42malaga.com>  #+#  +:+       +#+         */
+/*                                               +#+#+#+#+#+   +#+            */
+/*   Created: 2026/10/21 18:39:13 by joquinta         #+#    #+#              */
+/*   Updated: 2026/10/26 13:13:01 by joquinta        ###   ########.fr        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	j;
 
 	if (!s1 || !s2)
-		return (NULL);	
+		return (NULL);
 	s_res = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (s_res == NULL)
 		return (NULL);
