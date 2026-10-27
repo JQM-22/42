@@ -520,11 +520,15 @@ Dado que no puedes acceder directamente a posiciones intermedias de un stack con
             pa $\rightarrow$ pasa el 1   
             Resultado final: a = [1, 2, 3, 4, 5] ordenado ascendentemente y b = [].   
             
-    ⚖️ Pros y Contras en Push_swap
+    - ⚖️ Pros y Contras en Push_swap
         
-    Ventajas:Es el más fácil y rápido de programar de todo el proyecto (se hace con unas 30 líneas de código).Es conceptualmente infalible (siempre termina ordenando bien).Cumple a la perfección el requisito de algoritmo $\mathcal{O}(n^2)$ para la bandera --simple.   
+        - Ventajas:
         
-    Desventajas:Consume una cantidad enorme de operaciones en pilas grandes (para 100 números puede llegar a superar las 2500 operaciones), por lo que no sirve para obtener la puntuación de rendimiento excelente en la parte general, utilizándose exclusivamente cuando se fuerza la bandera --simple.
+        Es el más fácil y rápido de programar de todo el proyecto (se hace con unas 30 líneas de código).Es conceptualmente infalible (siempre termina ordenando bien).Cumple a la perfección el requisito de algoritmo $\mathcal{O}(n^2)$ para la bandera --simple.   
+        
+        - Desventajas:
+        
+        Consume una cantidad enorme de operaciones en pilas grandes (para 100 números puede llegar a superar las 2500 operaciones), por lo que no sirve para obtener la puntuación de rendimiento excelente en la parte general, utilizándose exclusivamente cuando se fuerza la bandera --simple.
 
 ### Diagrama de flujo del Algoritmo Selection Sort
 ```mermaid
