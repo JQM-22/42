@@ -169,40 +169,71 @@ flowchart TD
     F4 --> F5
     F5 --> F6
 ```
-### Detalle por Fases:
-- FASE 1: Parsing y Validación de Entradas
+## Detalle por Fases:
+## - FASE 1: Parsing y Validación de Entradas
     - Diseñar la lectura de argc / argv.   
     - Crear funciones de verificación: detección de signos inválidos, no numéricos, límites de INT_MIN / INT_MAX y búsqueda de valores duplicados.   
     - Controlar la impresión adecuada de Error\n.   
 
-- FASE 2: Estructuras y Primitivas del Stack
-    - Definir la estructura t_stack (usualmente mediante listas doblemente enlazadas con índices/rangos simplificados).   
-    - Programar de forma aislada las 11 instrucciones requeridas (sa, sb, pa, pb, ra, rb, rra, rrb, etc.) para asegurar que modifiquen el stack de forma impecable.   
-- FASE 3: Cálculo del Índice de Desorden
+## - FASE 2: Estructuras y Primitivas del Stack
+- Definir la estructura t_stack (usualmente mediante listas doblemente enlazadas con índices/rangos simplificados):
+
+(transcribir la funcion con while)
+```c
+function compute_disorder(stack a):
+mistakes = 0
+total_pairs = 0
+for i from 0 to size(a)-1:
+for j from i+1 to size(a)-1:
+total_pairs += 1
+if a[i] > a[j]:
+mistakes += 1
+return mistakes / total_pairs
+```
+- Programar de forma aislada las 11 instrucciones requeridas (sa, sb, pa, pb, ra, rb, rra, rrb, etc.) para asegurar que modifiquen el stack de forma impecable:
+
+### 🔄 Operaciones Permitidas en Push_swap
+
+#### 1. Swap (Intercambio)
+* `sa` (**swap a**): Intercambia los dos primeros elementos en la cima del stack a[cite: 12]. No realiza ninguna acción si el stack tiene un elemento o está vacío[cite: 12].
+* `sb` (**swap b**): Intercambia los dos primeros elementos en la cima del stack b[cite: 12]. No realiza ninguna acción si el stack tiene un elemento o está vacío[cite: 12].
+* `ss`: Ejecuta `sa` y `sb` de forma simultánea[cite: 12].
+
+#### 2. Push (Empujar / Transferir)
+* `pa` (**push a**): Toma el primer elemento disponible en la cima del stack b y lo coloca en la cima del stack a[cite: 13]. No realiza ninguna acción si b está vacío[cite: 13].
+* `pb` (**push b**): Toma el primer elemento disponible en la cima del stack a y lo coloca en la cima del stack b[cite: 13]. No realiza ninguna acción si a está vacío[cite: 13].
+
+#### 3. Rotate (Rotación hacia arriba)
+* `ra` (**rotate a**): Desplaza hacia arriba todos los elementos del stack a en una posición[cite: 13]. El elemento situado en la cima pasa a ser el último[cite: 13].
+* `rb` (**rotate b**): Desplaza hacia arriba todos los elementos del stack b en una posición[cite: 13]. El elemento situado en la cima pasa a ser el último[cite: 13].
+* `rr`: Ejecuta `ra` y `rb` de forma simultánea[cite: 13].
+
+#### 4. Reverse Rotate (Rotación inversa hacia abajo)
+* `rra` (**reverse rotate a**): Desplaza hacia abajo todos los elementos del stack a en una posición[cite: 13]. El elemento situado en el fondo pasa a ser la nueva cima[cite: 13].
+* `rrb` (**reverse rotate b**): Desplaza hacia abajo todos los elementos del stack b en una posición[cite: 13]. El elemento situado en el fondo pasa a ser la nueva cima[cite: 13].
+* `rrr`: Ejecuta `rra` y `rrb` de forma simultánea[cite: 13].   
+
+## - FASE 3: Cálculo del Índice de Desorden
     - Implementar la función compute_disorder para evaluar el porcentaje de errores/inversiones en el orden del stack inicial.   
 
-- FASE 4: Algoritmos de Ordenación
+## - FASE 4: Algoritmos de Ordenación
     - Casos pequeños (2 a 5 elementos): Hardcodear casos óptimos muy rápidos (p. ej., ordenar 3 números en $\le 2$ movimientos).   
     - Algoritmo Simple ($O(n^2)$): Selection/Insertion sort para el flag --simple.   
     - Algoritmo Intermedio ($O(n\sqrt{n})$): Chunking sort.   
     - Algoritmo Complejo ($O(n \log n)$): Radix sort o Turk Algorithm optimizado.   
     - Algoritmo Adaptativo: Enrutador dinámico que llama a los métodos anteriores según el umbral de desorden calculado en la Fase 3.   
 
-- FASE 5: Modos Especiales (Flags & Benchmarks)
+## - FASE 5: Modos Especiales (Flags & Benchmarks)
     - Parsear las opciones --simple, --medium, --complex y --adaptive.   
     - Implementar la flag opcional --bench para emitir el resumen de rendimiento por stderr.   
 
-- FASE 6: Bonus (checker), Pruebas y Documentación
+## - FASE 6: Bonus (checker), Pruebas y Documentación
     - Desarrollar el programa checker para leer comandos de stdin.   
     - Redactar el README.md obligatorio con autorías, justificaciones teóricas de algoritmos y descripciones de uso de IA.   
     - Realizar pruebas masivas para garantizar 0 fugas de memoria (leaks) y cumplir los márgenes de operaciones requeridos para 100 y 500 enteros.   
 
 
-Para conseguir la puntuación de Rendimiento Excelente en todos los rangos (
-<700 operaciones para 100 números y 
-<5500 operaciones para 500 números), se deben elegir muy bien los algoritmos para cada una de las 4 estrategias exigidas por el subject.   
-PDF
-+ 1
+Para conseguir la puntuación de Rendimiento Excelente en todos los rangos (<700 operaciones para 100 números y  <5500 operaciones para 500 números), se deben elegir muy bien los algoritmos para cada una de las 4 estrategias exigidas por el subject.   
 
 ### 📊 Esquema General de Algoritmos Posibles
 ```mermaid
@@ -246,137 +277,92 @@ flowchart TD
 
 ### 🔍 Análisis de Algoritmos por Categóría
 1. Estrategia Simple: 
-O(n 
-2
- )
-Opción A: Selection Sort Adaptado
+O(n 2)
 
-Cómo funciona: Busca el elemento mínimo en la pila a, lo rota hasta la cima y lo pasa (pb) a la pila b. Al terminar, devuelve todo a a (pa).
+    - Opción A: Selection Sort Adaptado
 
-Rendimiento: Pobre para listas grandes (
->2000 ops en 100 números). Cumple solo el requisito teórico.   
-PDF
-+ 1
+        Cómo funciona: Busca el elemento mínimo en la pila a, lo rota hasta la cima y lo pasa (pb) a la pila b. Al terminar, devuelve todo a a (pa).
 
-Dificultad de implementación: Muy Baja (1/5).
+        Rendimiento: Pobre para listas grandes ( >2000 ops en 100 números). Cumple solo el requisito teórico.   
 
-Opción B: Insertion Sort Adaptado
+        Dificultad de implementación: Muy Baja (1/5).
 
-Cómo funciona: Toma elementos de a a b manteniéndolos ordenados en b insertándolos en su posición correcta.
+    - Opción B: Insertion Sort Adaptado
 
-Rendimiento: Algo mejor en casos parcialmente ordenados.
+        Cómo funciona: Toma elementos de a a b manteniéndolos ordenados en b insertándolos en su posición correcta.
 
-Dificultad de implementación: Baja (2/5).
+        Rendimiento: Algo mejor en casos parcialmente ordenados.
+
+        Dificultad de implementación: Baja (2/5).
 
 💡 Recomendación para el flag --simple: Selection Sort. Dado que se usará para probar la flag --simple, lo ideal es la menor complejidad de código posible.
 
 2. Estrategia Intermedia: 
-O(n 
-n
+O(n n)
 
-​
- )
-Opción A: Chunking Sort (Por Bloques / Rangos)
+    - Opción A: Chunking Sort (Por Bloques / Rangos)
 
-Cómo funciona: Divide los valores normalizados (índices de 
-0 a 
-N−1) en 
-N
+        Cómo funciona: Divide los valores normalizados (índices de 0 a N−1) en N bloques. Envía a b primero los elementos del bloque más pequeño, usando rb para colocar los mayores arriba y los menores abajo dentro de b. Luego se devuelven a a de forma óptima.
 
-​
-  bloques. Envía a b primero los elementos del bloque más pequeño, usando rb para colocar los mayores arriba y los menores abajo dentro de b. Luego se devuelven a a de forma óptima.
+        Rendimiento: Muy Bueno (~600 ops para 100 números, ~5500 ops para 500 números).
 
-Rendimiento: Muy Bueno (~600 ops para 100 números, ~5500 ops para 500 números).
+        Dificultad de implementación: Media (3/5).
 
-Dificultad de implementación: Media (3/5).
+    - Opción B: Bucket Sort adaptado a Stacks
 
-Opción B: Bucket Sort adaptado a Stacks
+        Cómo funciona: Similar a Chunking, pero repartiendo en n intervalos rígidos.
 
-Cómo funciona: Similar a Chunking, pero repartiendo en 
-n
+        Rendimiento: Bueno, pero genera más operaciones extras en las fronteras entre buckets.
 
-​
-  intervalos rígidos.
+        Dificultad de implementación: Media-Alta (3.5/5).
 
-Rendimiento: Bueno, pero genera más operaciones extras en las fronteras entre buckets.
-
-Dificultad de implementación: Media-Alta (3.5/5).
-
-💡 Recomendación para el flag --medium: Chunking Sort. Es la implementación estándar para cumplir 
-O(n 
-n
-
-​
- ), ofreciendo un excelente equilibrio entre número de operaciones y sencillez conceptual.   
-PDF
+💡 Recomendación para el flag --medium: Chunking Sort. Es la implementación estándar para cumplir O(n n), ofreciendo un excelente equilibrio entre número de operaciones y sencillez conceptual.   
 
 3. Estrategia Compleja: 
 O(nlogn)
-Opción A: Radix Sort (LSD en base 2 o base 4)
+    - Opción A: Radix Sort (LSD en base 2 o base 4)
 
-Cómo funciona: Analiza los bits de los números ordenados por índice. Pasa a b los números que tienen un 0 en el bit actual y mantiene en a los que tienen 1.
+        Cómo funciona: Analiza los bits de los números ordenados por índice. Pasa a b los números que tienen un 0 en el bit actual y mantiene en a los que tienen 1.
 
-Rendimiento: Regular/Aceptable (~1100 ops en 100 núm, ~6700 ops en 500 núm). Pasa el corte del subject, pero no llega al nivel Excelente.   
-PDF
+        Rendimiento: Regular/Aceptable (~1100 ops en 100 núm, ~6700 ops en 500 núm). Pasa el corte del subject, pero no llega al nivel Excelente.   
 
-Dificultad de implementación: Muy Baja (1.5/5).
+        Dificultad de implementación: Muy Baja (1.5/5).
 
-Opción B: Turk Algorithm (Algoritmo del Turco / Push Cost Algorithm)
+    - Opción B: Turk Algorithm (Algoritmo del Turco / Push Cost Algorithm)
 
-Cómo funciona: Asigna un "coste de operaciones" a cada nodo de a para ser insertado en su posición correcta dentro de b (combinando rr, rrr, ra, rb, etc.). Envía siempre el nodo con menor coste acumulado.
+        Cómo funciona: Asigna un "coste de operaciones" a cada nodo de a para ser insertado en su posición correcta dentro de b (combinando rr, rrr, ra, rb, etc.). Envía siempre el nodo con menor coste acumulado.
 
-Rendimiento: EXCELENTE (~550-620 ops para 100 números; ~4800-5300 ops para 500 números).
+        Rendimiento: EXCELENTE (~550-620 ops para 100 números; ~4800-5300 ops para 500 números).
 
-Dificultad de implementación: Media-Alta (4/5).
+        Dificultad de implementación: Media-Alta (4/5).
 
-Opción C: Quick Sort / Merge Sort adaptado
+    - Opción C: Quick Sort / Merge Sort adaptado
 
-Cómo funciona: Particiona recursivamente las pilas usando pivotes.
+        Cómo funciona: Particiona recursivamente las pilas usando pivotes.
 
-Rendimiento: Bueno, pero la sobrecoste de llamadas recursivas y manejo de sub-stacks en C complica mucho el código.
+        Rendimiento: Bueno, pero la sobrecoste de llamadas recursivas y manejo de sub-stacks en C complica mucho el código.
 
-Dificultad de implementación: Alta (4.5/5).
+        Dificultad de implementación: Alta (4.5/5).
 
 💡 Recomendación para el flag --complex: Turk Algorithm. Es el mejor candidato si el objetivo es alcanzar el rango Excelente en operaciones.   
-PDF
 
 4. Estrategia Adaptativa (Custom / Por Defecto)
    
 El subject exige que la estrategia por defecto elija internamente el método según el índice de desorden:   
 
+- Desorden  <0.2 (O(n) exigido):   
 
-Desorden 
-<0.2 (
-O(n) exigido):   
+    Algoritmo: Adaptive Insertion / Linear Fix. Identifica los 1 o 2 elementos fuera de sitio mediante una pasada lineal y realiza los swaps/rotaciones mínimos necesarios.
 
+    Rendimiento: Extremadamente bajo en movimientos (<2n operaciones).
 
-Algoritmo: Adaptive Insertion / Linear Fix. Identifica los 1 o 2 elementos fuera de sitio mediante una pasada lineal y realiza los swaps/rotaciones mínimos necesarios.
+- Desorden  0.2≤d<0.5 (O(n n) exigido):   
 
-Rendimiento: Extremadamente bajo en movimientos (
-<2n operaciones).
+    Algoritmo: Chunking Sort configurado con tamaño de bloque óptimo (≈ n ).
 
-Desorden 
-0.2≤d<0.5 (
-O(n 
-n
+- Desorden ≥0.5 (O(nlogn) exigido):   
 
-​
- ) exigido):   
-PDF
-
-Algoritmo: Chunking Sort configurado con tamaño de bloque óptimo (
-≈ 
-n
-
-​
- ).
-
-Desorden 
-≥0.5 (
-O(nlogn) exigido):   
-PDF
-
-Algoritmo: Turk Algorithm (o Radix totalmente optimizado).
+    Algoritmo: Turk Algorithm (o Radix totalmente optimizado).
 
 ### Matriz de comparativa de algoritmos
 
@@ -401,11 +387,92 @@ O(n n) con métricas en el límite de la excelencia.
 
 - Estrategia Adaptativa (--adaptive): Enruta según el índice de desorden:   
 
-        <0.2→ Corrección lineal (O(n))   
+        <0.2→ Corrección lineal O(n^2)   
 
         0.2 a 0.5→ Chunking Sort (O(n n))   
 
-        ≥0.5→ Turk Algorithm (O(nlogn))   
+        ≥0.5→ Turk Algorithm (O(n log n))   
+
+
+# Profundizando en Algoritmos: ("elegidos")
+### --simple: $\mathcal{O}(n^2)$ - Selection Sort:
+
+El algoritmo Selection Sort (Ordenamiento por Selección) es la estrategia más directa e intuitiva de todas para cumplir con el requisito de O(n^2) del flag --simple.   
+- 💡 ¿Qué hace? (La idea central)
+En lugar de intentar trucos matemáticos complejos, hace exactamente lo que haría una persona sin experiencia: busca el número más pequeño de la pila A, lo sube a la cima, lo aparta a la pila B, y repite el proceso hasta vaciar A. Al final, devuelve todo a la pila B en orden perfecto
+- ⚙️ ¿Cómo funciona? (Mecánica de Stacks)
+Dado que no puedes acceder directamente a posiciones intermedias de un stack con índices tipo array (como a[i]), tienes que rotar la pila para traer el elemento deseado hasta la cima.   
+    - Localizar: Recorres la pila A de arriba a abajo y anotas cuál es el número más pequeño y en qué posición está.   
+    - Calcular la ruta más corta hacia la cima: 
+        - Si el mínimo está en la mitad superior del stack, rotas hacia arriba usando ra.   
+        - Si está en la mitad inferior, rotas hacia abajo usando rra. 
+    - Enviar a B: Una vez que el mínimo está en la cima de A, ejecutas pb. En B, los números quedan almacenados de mayor a menor (o en el orden inverso en que fueron empujados).   
+    - Repetir: Haces lo mismo hasta que en A no quede ningún elemento (o queden solo 2 o 3 para acelerar).   
+    - Vaciar B de vuelta a A: Pasas secuencialmente todos los elementos de B a A mediante pa. 
+    Como salieron en orden ordenado, A queda completamente ordenado de menor a mayor de forma ascendente.   
+
+- Paso a paso con un ejemplo visual
+    - Supongamos que el stack a tiene los valores: [4, 2, 5, 1, 3] (donde 4 es la cima).
+        - Paso 1: Buscar y extraer el 1 
+            
+            Pila inicial: a = [4, 2, 5, 1, 3], b = []   
+            El mínimo es 1 (está en la parte baja).
+            
+            Hacemos rra $\rightarrow$ a = [3, 4, 2, 5, 1]   
+            Hacemos rra $\rightarrow$ a = [1, 3, 4, 2, 5] (¡el 1 ya está en la cima!)   
+            Hacemos pb $\rightarrow$ a = [3, 4, 2, 5], b = [1]   
+        
+        - Paso 2: Buscar y extraer el 2 
+            
+            El mínimo ahora en a es 2.
+            
+            Hacemos ra $\rightarrow$ a = [4, 2, 5, 3]   
+            Hacemos ra $\rightarrow$ a = [2, 5, 3, 4] (el 2 está en la cima)   
+            Hacemos pb $\rightarrow$ a = [5, 3, 4], b = [2, 1]   
+        
+        - Paso 3: Buscar y extraer el 3
+            
+            El mínimo ahora es 3.
+            
+            Hacemos ra $\rightarrow$ a = [3, 4, 5]   
+            Hacemos pb $\rightarrow$ a = [4, 5], b = [3, 2, 1]   
+            
+        - Paso 4: Buscar y extraer el 4
+        
+            El mínimo es 4 (ya está en la cima).
+            
+            Hacemos directamente pb $\rightarrow$ a = [5], b = [4, 3, 2, 1]   
+            
+        - Paso 5: Mover el último elemento (el 5)
+        
+            Hacemos pb $\rightarrow$ a = [], b = [5, 4, 3, 2, 1]   
+            
+        - Paso 6: Devolver todo a A
+            
+            Hacemos pa 5 veces consecutivas:   
+            
+            pa $\rightarrow$ pasa el 5   
+            pa $\rightarrow$ pasa el 4   
+            pa $\rightarrow$ pasa el 3   
+            pa $\rightarrow$ pasa el 2   
+            pa $\rightarrow$ pasa el 1   
+            Resultado final: a = [1, 2, 3, 4, 5] ordenado ascendentemente y b = [].   
+            
+    ⚖️ Pros y Contras en Push_swap
+        
+    Ventajas:Es el más fácil y rápido de programar de todo el proyecto (se hace con unas 30 líneas de código).Es conceptualmente infalible (siempre termina ordenando bien).Cumple a la perfección el requisito de algoritmo $\mathcal{O}(n^2)$ para la bandera --simple.   
+        
+    Desventajas:Consume una cantidad enorme de operaciones en pilas grandes (para 100 números puede llegar a superar las 2500 operaciones), por lo que no sirve para obtener la puntuación de rendimiento excelente en la parte general, utilizándose exclusivamente cuando se fuerza la bandera --simple.
+
+
+
+
+
+
+
+
+
+
 
 
 ## Reparto de carga
@@ -460,3 +527,5 @@ flowchart TD
 | **4. Algoritmos Avanzados** | **Estrategia Compleja (O(n log n)):** Radix Sort por bits para cubrir `--complex` de forma directa[cite: 2, 15, 18] | **Algoritmo Adaptativo:** Motor Turk Algorithm para alcanzar rango Excelente cuando el desorden es ≥ 0.5[cite: 2, 15, 22] | Equitativa |
 | **5. Main, Flags y Bench** | **Main y Selector de Flags:** Parseo de argumentos de configuración, validación de incompatibilidades y liberación de memoria[cite: 2, 18] | **Modo Benchmark (`--bench`):** Desglose y recuento de movimientos por tipo a `stderr` con formato de métricas[cite: 2, 19] | Equitativa |
 | **6. Bonus y Cierre** | **Bonus (`checker`):** Lectura por `stdin` y validación de ordenación (`OK` / `KO`)[cite: 25] | **Documentación y Batería de Tests:** Redacción del `README.md` (justificaciones teóricas, IA)[cite: 20, 23, 27] y scripts de prueba para 100/500 números[cite: 22] | Equitativa |
+
+
