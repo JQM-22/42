@@ -178,7 +178,6 @@ flowchart TD
 ## - FASE 2: Estructuras y Primitivas del Stack
 - Definir la estructura t_stack (usualmente mediante listas doblemente enlazadas con índices/rangos simplificados):
 
-(transcribir la funcion con while)
 ```c
 function compute_disorder(stack a):
 mistakes = 0
@@ -190,6 +189,67 @@ if a[i] > a[j]:
 mistakes += 1
 return mistakes / total_pairs
 ```
+### 🧮 Función para el Cálculo del Índice de Desorden (con Listas Enlazadas)
+
+Esta función traduce el pseudocódigo del subject a **C estricto bajo la Norma de 42**[cite: 6, 14]:
+* Sustituye los bucles `for` por `while`.
+* Respeta el límite de variables locales (máximo 4 variables declaradas al inicio)[cite: 6].
+* Utiliza tipo `long` para evitar desbordamientos aritméticos al acumular comparaciones de pares.
+* Aplica conversión explícita (*casting*) a `double` para devolver el ratio en el intervalo $[0.0, 1.0]$ sin truncar a entero.
+
+---
+
+#### Definición de la estructura de referencia (`push_swap.h`)
+```c
+typedef struct s_stack
+{
+    int             value;
+    int             index;
+    struct s_stack  *next;
+    struct s_stack  *prev;
+}   t_stack;
+```
+Implementacion de funcion de calculo de desorden:
+
+```c
+double	compute_disorder(t_stack *a)
+{
+	t_stack	*current;
+	t_stack	*runner;
+	long	mistakes;
+	long	total_pairs;
+
+	if (!a || !a->next)
+		return (0.0);
+	mistakes = 0;
+	total_pairs = 0;
+	current = a;
+	while (current && current->next)
+	{
+		runner = current->next;
+		while (runner)
+		{
+			total_pairs++;
+			if (current->value > runner->value)
+				mistakes++;
+			runner = runner->next;
+		}
+		current = current->next;
+	}
+	return ((double)mistakes / (double)total_pairs);
+}
+```
+    💡 Puntos clave a recordar
+    Momento de ejecución: Debe calcularse sobre el stack a antes de emitir o ejecutar cualquier movimiento (pa, pb, ra, etc.)[cite: 14].
+
+    Escala de salida:
+
+    0.0: Stack perfectamente ordenado de menor a mayor[cite: 14].
+
+    1.0: Stack en orden estrictamente inverso (desorden máximo)[cite: 14].
+
+    Valor intermedio: Determina el umbral para el algoritmo adaptativo (< 0.2, 0.2 - 0.5, ≥ 0.5).
+
 - Programar de forma aislada las 11 instrucciones requeridas (sa, sb, pa, pb, ra, rb, rra, rrb, etc.) para asegurar que modifiquen el stack de forma impecable:
 
 ### 🔄 Operaciones Permitidas en Push_swap
@@ -395,12 +455,14 @@ O(n n) con métricas en el límite de la excelencia.
 
 
 # Profundizando en Algoritmos: ("elegidos")
-### --simple: $\mathcal{O}(n^2)$ - Selection Sort:
+## --simple: $\mathcal{O}(n^2)$ - Selection Sort:
 
 El algoritmo Selection Sort (Ordenamiento por Selección) es la estrategia más directa e intuitiva de todas para cumplir con el requisito de O(n^2) del flag --simple.   
 - 💡 ¿Qué hace? (La idea central)
+
 En lugar de intentar trucos matemáticos complejos, hace exactamente lo que haría una persona sin experiencia: busca el número más pequeño de la pila A, lo sube a la cima, lo aparta a la pila B, y repite el proceso hasta vaciar A. Al final, devuelve todo a la pila B en orden perfecto
 - ⚙️ ¿Cómo funciona? (Mecánica de Stacks)
+
 Dado que no puedes acceder directamente a posiciones intermedias de un stack con índices tipo array (como a[i]), tienes que rotar la pila para traer el elemento deseado hasta la cima.   
     - Localizar: Recorres la pila A de arriba a abajo y anotas cuál es el número más pequeño y en qué posición está.   
     - Calcular la ruta más corta hacia la cima: 
@@ -464,16 +526,283 @@ Dado que no puedes acceder directamente a posiciones intermedias de un stack con
         
     Desventajas:Consume una cantidad enorme de operaciones en pilas grandes (para 100 números puede llegar a superar las 2500 operaciones), por lo que no sirve para obtener la puntuación de rendimiento excelente en la parte general, utilizándose exclusivamente cuando se fuerza la bandera --simple.
 
+### Diagrama de flujo del Algoritmo Selection Sort
+```mermaid
+graph TD
+    START([Inicio: Stack A con N elementos, Stack B vacio]) --> CHECK_A{Esta A vacio}
+
+    CHECK_A -- No --> FIND_MIN[1. Buscar valor minimo y posicion en A]
+    FIND_MIN --> CHECK_POS{Posicion del minimo}
+
+    CHECK_POS -- Mitad superior --> ROT_UP[Rotar hacia arriba con ra hasta la cima]
+    CHECK_POS -- Mitad inferior --> ROT_DOWN[Rotar hacia abajo con rra hasta la cima]
+
+    ROT_UP --> DO_PB[2. Empujar minimo a B con pb]
+    ROT_DOWN --> DO_PB
+    DO_PB --> CHECK_A
+
+    CHECK_A -- Si --> CHECK_B{Esta B vacio}
+
+    CHECK_B -- No --> DO_PA[3. Devolver elementos a A con pa]
+    DO_PA --> CHECK_B
+
+    CHECK_B -- Si --> END([Fin: Stack A ordenado ascendentemente])
+
+    style START fill:none,stroke:#4b5563,stroke-width:1.5px
+    style END fill:none,stroke:#059669,stroke-width:1.5px
+```
+
+
+## --medium: $\mathcal{O}(n\sqrt{n})$ - Chunking Sort:
+
+El algoritmo Chunking Sort (ordenación por bloques o fragmentos) es la estrategia ideal para cubrir el requisito de complejidad $\mathcal{O}(n\sqrt{n})$ asociado al flag --medium.   
+
+- 💡 ¿Qué hace? (La idea central)
+
+En lugar de buscar los números uno a uno de forma estricta como en Selection Sort, divide todos los números en grupos ordenados por tamaño llamados chunks (bloques).   
+El objetivo es trasladar los números de A a B por franjas (primero los más pequeños, luego los medianos, etc.). 
+Al colocarlos en B de manera semiclasificada, devolverlos a A requiere muchas menos rotaciones, reduciendo drásticamente las operaciones totales.   
+
+- ⚙️ El prerrequisito clave: Indexación (Normalización)
+
+Para que este algoritmo funcione de forma predecible sin importar los valores originales (puedan ser números negativos o muy altos), primero se reemplaza cada número por su índice normalizado de $0$ a $n-1$:
+
+Si la entrada es [-50, 1000, 4, 0], sus índices asignados son [0, 3, 2, 1].
+Así, un stack de 100 números siempre contendrá los índices del 0 al 99.
+
+- 🔧 ¿Cómo funciona paso a paso?
+
+    - Paso 1: Definir el tamaño del bloque
+    
+        El subject indica dividir los elementos en aproximadamente $\sqrt{n}$ bloques:   
+    
+        - Para $100$ números: bloques de tamaño $\approx 15$ o subdividido en 5 a 7 chunks.
+        
+        - Para $500$ números: bloques de tamaño $\approx 30\text{--}40$ o subdividido en 11 a 13 chunks.
+    
+    - Paso 2: Empujar de A a B por ventanas/bloques móviles
+    
+        - Se define una ventana que acepta índices dentro de un rango actual, 
+        por ejemplo $[0 \dots \text{chunk\_size}]$.
+        
+        Miras la cima de A.   
+        
+        - Si el índice en la cima pertenece al bloque actual:Haces pb.   
+        
+        Optimización clave: 
+        
+        - Si el elemento empujado está en la mitad inferior de ese bloque, ejecutas rb para mandarlo al fondo de B. 
+        
+        Así, los más pequeños van al fondo de B y los medianos quedan arriba en B.   
+        
+        - Avanzas el rango de la ventana.
+        
+        - Si el número no pertenece al bloque actual, rotas con ra para buscar otro que sí pertenezca.   
+        
+        - Repites hasta que todo el stack a quede vacío.   
+    
+    - Paso 3: Recuperar todo de B hacia A
+    
+        Ahora en B los números no están estrictamente ordenados, pero sí están agrupados por cercanía:
+        
+        - Buscas el elemento máximo actual que queda en B.   
+        
+        Como los números están agrupados en franjas, el máximo siempre estará muy cerca de la cima o del fondo de B:
+        
+        - Si está cerca de la cima, rotas con rb.   
+        
+        - Si está cerca del fondo, rotas con rrb.   
+        
+        - Una vez en la cima de B, lo devuelves con pa.   
+        
+        Al devolver siempre el máximo disponible en cada paso, los elementos van cayendo en A en orden descendente inverso, de modo que a queda ordenado ascendentemente de menor a mayor.   
+        
+- 🚶 Ejemplo visual simplificado
+    
+    - Supongamos 6 números ya indexados del 0 al 5:a = [2, 5, 0, 4, 1, 3], con bloques de tamaño 3:
+        - Bloque 1: valores 0, 1, 2
+        - Bloque 2: valores 3, 4, 5
+        - Fase de vaciado a B (por bloques):
+            - El 2 pertenece al bloque 1 $\rightarrow$ pb.   
+            - El 5 pertenece al bloque 2 $\rightarrow$ ra para saltarlo temporalmente.   
+            - El 0 pertenece al bloque 1 $\rightarrow$ pb, y como es muy pequeño se hace rb.   
+            - El 1 pertenece al bloque 1 $\rightarrow$ pb.   Se pasa al Bloque 2 y se empujan 4, 5, 3 a B usando pb.   
+            - Resultado intermedio: a = [ ], b contiene los números separados en dos mitades reconocibles.   
+        - Fase de retorno a A: 
+            - Máximo en B es 5: se rota b hasta la cima y se hace pa.   
+            - Máximo en B es 4: se rota a la cima y se hace pa.   
+            - Máximo en B es 3: se hace pa.   
+            - Se repite con 2, 1, 0.   
+            - Resultado final: A = [0, 1, 2, 3, 4, 5] ordenado.   
+            
+    ⚖️ Pros y Contras en Push_swap
+    
+    - Ventajas:
+    
+        - Gran eficiencia operativa: Suele ordenar 100 números en unas $\approx 600$ operaciones (entrando de lleno en el rango Excelente).   
+    
+        - Simplicidad de código: No requiere calcular matrices de coste multidimensionales como el algoritmo del Turco ni manejar bits complejos como Radix.Satisface de forma directa y justificada la complejidad $\mathcal{O}(n\sqrt{n})$ solicitada en el subject.   
+    
+    - Desventajas: 
+    
+        - Para conjuntos muy grandes (500 números) requiere calibrar con cuidado el tamaño del bloque ($\sqrt{n}$) para mantenerse de forma consistente por debajo de las $5500$ operaciones requeridas para el nivel Excelente.   
+
+### Diagrama de flujo del Algoritmo Chunking Sort
+```mermaid
+graph TD
+    START([Inicio: Stack A con N elementos, Stack B vacio]) --> NORM[1. Normalizacion e Indexacion: Asignar indices de 0 a N-1]
+    NORM --> CHUNK_DEF[2. Parametros: Definir tamano de bloque y ventana inicial]
+    CHUNK_DEF --> CHECK_A{Esta A vacio}
+
+    CHECK_A -- No --> EVAL_TOP{Elemento cima en rango}
+    EVAL_TOP -- Si --> DO_PB[Empujar a B con pb]
+    DO_PB --> SPLIT_B{Indice en mitad menor del bloque}
+    SPLIT_B -- Si --> ROT_B[Rotar B con rb]
+    SPLIT_B -- No --> ADVANCE[Mantener en cima de B]
+    ROT_B --> ADVANCE
+    ADVANCE --> SLIDE[Avanzar ventana de rango]
+    SLIDE --> CHECK_A
+
+    EVAL_TOP -- No --> ROT_A[Rotar A con ra]
+    ROT_A --> CHECK_A
+
+    CHECK_A -- Si --> CHECK_B{Esta B vacio}
+    CHECK_B -- No --> FIND_MAX[Localizar valor maximo en B]
+    FIND_MAX --> ROTATE_MAX[Rotar B por ruta mas corta rb o rrb]
+    ROTATE_MAX --> DO_PA[Empujar maximo a A con pa]
+    DO_PA --> CHECK_B
+
+    CHECK_B -- Si --> END([Fin: Stack A ordenado ascendentemente])
+
+    style START fill:none,stroke:#4b5563,stroke-width:1.5px
+    style END fill:none,stroke:#059669,stroke-width:1.5px
+
+```
+
+
+## --complex: $\mathcal{O}(n \log n)$ - Turk Algorithm:
+
+El Turk Algorithm (o Algoritmo del Turco) es un algoritmo voraz (greedy) diseñado específicamente para el modelo de instrucciones de Push_swap. 
+
+Es la estrategia más utilizada para reventar los récords de operaciones del proyecto y situarse con holgura en el rango Excelente ($< 700$ operaciones para 100 números y $< 5500$ para 500).   
+
+- 💡 ¿Qué hace? (La idea central)
+
+    En lugar de forzar un orden rígido (como ordenar bit a bit o buscar mínimos globales), 
+
+    el Turco se pregunta nodo por nodo: 
+    
+    "¿Cuál de todos los números de la pila a me cuesta menos movimientos colocar en su sitio exacto dentro de la pila B?"   
+
+    Calcula las rotaciones necesarias para cada elemento de A y para su destino en B. 
+
+    Elige el elemento más "barato", 
+
+    aprovecha las rotaciones dobles (rr y rrr) para ahorrar instrucciones, 
+
+    y lo empuja con pb. 
+
+    Al final, devuelve todo a A de forma ordenada.   
+
+- ⚙️ Mecánica de Costes y Rotaciones Dobles (El secreto del Turco)
+
+    El motivo por el que este algoritmo es tan eficiente radica en que amortiza movimientos:
+
+    - Si tienes que rotar a hacia arriba 2 veces (ra, ra) y la pila b hacia arriba 2 veces (rb, rb), el Turco las combina en dos movimientos dobles: rr + rr (2 operaciones en vez de 4).   
+    - Si ambas deben rotar hacia abajo, usa rrr.   
+    - Si una rota hacia arriba y otra hacia abajo, rota cada pila de manera independiente (ra + rrb).
+    
+- 🔧 ¿Cómo funciona paso a paso?
+
+    - Paso 1: Inicialización rápida
+        - Pasas los 2 primeros elementos de A a B sin pensarlo mediante dos pb.   
+        - La pila B se mantendrá siempre ordenada de forma circular y descendente (el mayor arriba, el menor abajo).
+    - Paso 2: Vaciar A hacia B buscando el menor coste
+        - Mientras en a queden más de 3 elementos:
+            - Calcular la posición destino (target) en B: 
+                - Para cada número de A, buscas entre qué dos números de B debe encajar (su posición natural en orden descendente). 
+                - Si el número es más grande o más pequeño que todos los de B, su destino será encima del valor máximo de B.
+            - Calcular el coste de cada nodo de A:
+                - ¿Cuántas rotaciones necesita ese nodo para llegar a la cima de A? (usando la ruta más corta: ra o rra).   
+                - ¿Cuántas rotaciones necesita su posición destino en B para colocarse arriba del todo? (rb o rrb).   
+                - Sumas ambos costes, descontando las rotaciones simultáneas posibles (rr o rrr).   
+            - Ejecutar el nodo más barato:
+                - Tomas el nodo que sume menos movimientos en total.
+                - Realizas las rotaciones dobles (rr/rrr) que compartan.   
+                - Terminas las rotaciones individuales restantes (ra, rra, rb o rrb).   
+                - Haces pb.   
+            - Repites el bucle hasta que en a queden exactamente 3 números.
+    - Paso 3: Ordenar los 3 números de A
+        - Tres números se ordenan de forma óptima en un máximo de 2 movimientos combinando sa, ra o rra según el caso.   
+    - Paso 4: Devolver todo de B a A
+        - Ahora B contiene casi todos los números colocados de forma circular, y A tiene 3 números ordenados:
+            - Para el elemento superior de B, buscas su hueco exacto en A (el número inmediatamente mayor que él)
+            - Rotas a con ra o rra hasta que ese hueco esté en la cima.   
+            - Haces pa.   
+            - Repites hasta vaciar B por completo.   
+    - Paso 5: Alineación final
+        - Todos los números están en A en orden relativo, pero quizás el número mínimo no ha quedado en la cima (por ejemplo: 3, 4, 5, 1, 2).
+        - Solo queda rotar a (ra o rra) hasta dejar el valor mínimo en la cima absoluta. ¡El stack está completamente ordenado!   
+        
+🚶 Ejemplo conceptual en miniatura
+
+- Imagina que en B tienes [8, 5, 2] y en A tienes los números [10, 4, 7]:
+    - Para insertar el 4, su destino en B es entre el 5 y el 2. Necesita que b rote 2 veces hacia arriba (rb, rb).   
+    - Para insertar el 7, su destino es entre el 8 y el 5. Solo necesita que b rote 1 vez (rb).   
+    - El Turco calcula todas las distancias en ambas pilas a la vez, elige el 7 porque su combinación de movimientos totales es la más corta, alinea las dos pilas a la vez usando rotaciones combinadas y hace pb.   
+    
+⚖️ Pros y Contras en Push_swap
+
+- Ventajas:
+    - Rendimiento imbatible: Es el algoritmo con menor número de operaciones promedio en toda la historia de Push_swap (~550-600 ops para 100 números y ~4800-5200 ops para 500 números), superando el rango Excelente sin despeinarse.   
+    - No depende de trucos de potencias de 2 o bases binarias como Radix.
+    
+- Desventajas:
+    - Mayor complejidad de código: Requiere funciones auxiliares para calcular distancias relativas, determinar el coste óptimo y coordinar rotaciones simultáneas (rr/rrr).   
+    Como vimos antes, en teoría tradicional pura sobre arrays es un algoritmo voraz de inserción ($\mathcal{O}(n^2)$), pero dentro de las restricciones de Push_swap y la sección VI.3.1 del subject, se valida y clasifica por la cantidad real de instrucciones emitidas.   
+ 
+### Flujo completo del Turk Algorithm
+```mermaid
+flowchart TD
+    START(["Inicio: Stack A con N elementos, Stack B vacío"]) --> INIT["1. Inicialización:<br/>Mover 2 elementos a B mediante 'pb pb'"]
+    
+    INIT --> CHECK_SIZE{"¿Quedan más de<br/>3 elementos en A?"}
+
+    subgraph GREEDY_PUSH ["Bucle Voraz de Inserción (A ➔ B)"]
+        CHECK_SIZE -- Sí --> TARGET["Para cada nodo de A:<br/>Calcular su 'target' en B (orden descendente circular)"]
+        TARGET --> COST["Calcular coste de rotaciones totales:<br/>• Pasos a cima de A (ra o rra)<br/>• Pasos de target a cima de B (rb o rrb)<br/>• Descuento por dobles rotaciones (rr / rrr)"]
+        COST --> CHEAPEST["Seleccionar el nodo con menor coste total"]
+        CHEAPEST --> EXEC_ROT["Ejecutar rotaciones combinadas (rr / rrr)<br/>y restantes individuales (ra/rra/rb/rrb)"]
+        EXEC_ROT --> DO_PB["Empujar nodo elegido a B ('pb')"]
+        DO_PB --> CHECK_SIZE
+    end
+
+    CHECK_SIZE -- No --> SORT_THREE["2. Ordenar los 3 elementos restantes en A<br/>(Algoritmo fijo en ≤ 2 movimientos: sa, ra, rra)"]
+
+    subgraph RESTORE ["Recuperación Ordenada (B ➔ A)"]
+        SORT_THREE --> CHECK_B{"¿Está B vacío?"}
+        CHECK_B -- No --> TARGET_A["Para la cima de B:<br/>Localizar su posición exacta en A"]
+        TARGET_A --> ROT_A["Rotar A (ra o rra) hasta alinear el hueco"]
+        ROT_A --> DO_PA["Empujar elemento a A ('pa')"]
+        DO_PA --> CHECK_B
+    end
+
+    CHECK_B -- Sí --> FINAL_ALIGN["3. Alineación Final:<br/>Rotar A (ra o rra) hasta dejar el valor mínimo en la cima"]
+    FINAL_ALIGN --> END(["Fin: Stack A ordenado ascendentemente"])
+
+    style GREEDY_PUSH fill:none,stroke:#0284c7,stroke-width:1.5px
+    style RESTORE fill:none,stroke:#ca8a04,stroke-width:1.5px
+    style START fill:none,stroke:#4b5563,stroke-width:1.5px
+    style END fill:none,stroke:#059669,stroke-width:1.5px
+```
 
 
 
 
+--- 
+---
 
-
-
-
-
-
+# ORGANIZACION DEL TRABAJO EN EQUIPO ( A REVISAR Y VALIDAR )
 
 ## Reparto de carga
 
